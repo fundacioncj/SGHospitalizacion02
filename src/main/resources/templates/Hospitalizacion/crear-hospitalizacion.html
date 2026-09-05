@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--
+  AJUSTE / SUPUESTO:
+  El ZIP entregado contenía únicamente la distribución "cruda" de
+  AdminLTE3 (dist/, plugins/, docs/), no las plantillas Thymeleaf
+  reales del proyecto con los fragments de layout/header/sidebar/
+  footer. Esta página usa la convención más común
+  (th:replace="~{fragments/xxx :: xxx}") y el atributo th:with
+  "activePage" que ya describes usar en el sidebar. Si tus fragments
+  se llaman distinto, solo hay que ajustar las 4 líneas marcadas
+  con "AJUSTE" más abajo; el resto (formulario, IDs, JS) no depende
+  de esto y ya funciona con tu app.js.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:with="activePage='crearHospitalizacion'">
+<head>
+  <!-- AJUSTE: nombre real de tu fragmento de <head> -->
+  <th:block th:replace="~{fragments/layout :: head}"></th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- AJUSTE: nombre real de tu fragmento de header -->
+  <nav th:replace="~{fragments/layout :: header}"></nav>
+  <!-- AJUSTE: nombre real de tu fragmento de sidebar -->
+  <aside th:replace="~{fragments/layout :: sidebar}" th:with="activePage='crearHospitalizacion'"></aside>
+
+  <div class="content-wrapper">
+
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Registrar Hospitalización</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+              <li class="breadcrumb-item"><a th:href="@{/hospitalizacion}">Hospitalización</a></li>
+              <li class="breadcrumb-item active">Registrar</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card card-info card-outline">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-procedures mr-1"></i> Datos de la hospitalización</h3>
+          </div>
+
+          <form id="formHospCrear" autocomplete="off">
+            <div class="card-body">
+
+              <div class="row px-4 mb-2">
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Cédula del paciente</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-id-card"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control"
+                            id="hospCrearCedulaPaciente"
+                            placeholder="Ej. 0912345678">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button"
+                                id="hospCrearVerificarPacienteBtn">
+                          <i class="fas fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Paciente</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-user"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control"
+                            id="hospCrearPacienteNombre"
+                            placeholder="Paciente no verificado"
+                            readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Médico tratante</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-user-md"></i>
+                        </span>
+                      </div>
+                      <select class="form-control" id="hospCrearMedico">
+                        <option selected disabled>Cargando médicos...</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-row px-4 mb-2">
+                <div class="form-group col-md-6">
+                  <label for="hospCrearFechaIngreso">Fecha de ingreso</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-calendar-alt"></i>
+                      </span>
+                    </div>
+                    <input type="date" class="form-control"
+                          id="hospCrearFechaIngreso" required>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="hospCrearSala">Sala / Habitación</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-bed"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control"
+                          id="hospCrearSala"
+                          placeholder="Ej. Sala 3 - Cama 12">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group px-4 mb-2">
+                <label for="hospCrearMotivoIngreso">Motivo de ingreso</label>
+                <textarea class="form-control" id="hospCrearMotivoIngreso" rows="2" required></textarea>
+              </div>
+
+              <div class="form-group px-4 mb-2">
+                <label for="hospCrearDiagnostico">Diagnóstico principal</label>
+                <textarea class="form-control" id="hospCrearDiagnostico" rows="2" required></textarea>
+              </div>
+
+              <div class="form-group px-4 mb-2">
+                <label for="hospCrearObservaciones">Observaciones</label>
+                <textarea class="form-control" id="hospCrearObservaciones" rows="3"></textarea>
+              </div>
+
+            </div>
+
+            <div class="card-footer text-right">
+              <button type="reset" class="btn btn-default">Limpiar</button>
+              <button type="submit" class="btn btn-info">
+                <i class="bi bi-check-circle"></i> Registrar hospitalización
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- AJUSTE: nombre real de tu fragmento de footer -->
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<!-- Contenedor de toasts reutilizado por mostrarToast() en app.js.
+    Si tu fragmento de layout ya lo incluye globalmente, borra este div
+    para no duplicarlo. -->
+<div th:replace="~{fragments/layout :: toast-container}"></div>
+
+<!-- AJUSTE: nombre real de tu fragmento de scripts (jQuery, Bootstrap, AdminLTE) -->
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+
+</body>
+</html>

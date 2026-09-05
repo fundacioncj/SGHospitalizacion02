@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <nav th:replace="~{fragments/layout :: header}"></nav>
+  <aside th:replace="~{fragments/layout :: sidebar}" th:with="activePage='historiaClinica'"></aside>
+
+  <div class="content-wrapper">
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1><i class="fas fa-notes-medical mr-2"></i>Historia Clínica</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="hospitalizacion.html">Inicio</a></li>
+              <li class="breadcrumb-item active">Historia Clínica</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+
+        <div class="card card-outline card-info">
+          <div class="card-body">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text input-custom-text"><i class="fas fa-id-card"></i></span>
+              </div>
+              <input type="text" id="hcCedulaInput" class="form-control input-custom-field"
+                      placeholder="Ingresa el número de cédula del paciente..." maxlength="10" inputmode="numeric" />
+              <div class="input-group-append">
+                <button id="hcBuscarBtn" type="button" class="btn btn-info btn-custom-search">
+                  <i class="fas fa-search mr-1"></i>Buscar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-list mr-2"></i>Historias clínicas</h3>
+          </div>
+          <div class="card-body p-0">
+            <div id="hcResultados">
+              <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h4>Busca un paciente</h4>
+                <p>Ingresa una cédula y presiona "Buscar" para ver sus historias clínicas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL VER -->
+<!-- ============================================================ -->
+<div class="modal fade" id="modalHcVer" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-custom-width modal-dialog-centered">
+    <div class="modal-content modal-custom-content">
+      <div class="modal-header modal-custom-header bg-info">
+        <div>
+          <h5 class="modal-title modal-custom-title text-white mb-0">
+            <i class="fas fa-notes-medical mr-2"></i>Detalle de historia clínica
+          </h5>
+          <small id="hcVerSubtitle" class="text-white"></small>
+        </div>
+        <button type="button" class="close modal-custom-close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-custom-body">
+        <div id="hcVerContenido"></div>
+      </div>
+      <div class="modal-footer modal-custom-footer">
+        <button type="button" class="btn btn-secondary btn-custom-action" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL EDITAR HISTORIA CLÍNICA -->
+<!-- ============================================================ -->
+<div class="modal fade" id="modalHcEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <form id="formHcEditar" class="modal-content">
+
+      <div class="modal-header bg-info">
+        <div>
+          <h5 class="modal-title text-white mb-0">
+            <i class="fas fa-pen mr-2"></i>Editar historia clínica
+          </h5>
+          <small id="hcEditarSubtitle" class="text-white"></small>
+        </div>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <input type="hidden" id="hcEditId">
+
+        <div class="form-row">
+          <div class="form-group col-md-7">
+            <label for="hcEditNumero">N.° de historia clínica</label>
+            <input type="text" id="hcEditNumero" class="form-control" disabled>
+          </div>
+
+          <div class="form-group col-md-5">
+            <label for="hcEditFechaApertura">Fecha de apertura</label>
+            <input type="date" id="hcEditFechaApertura" class="form-control" disabled>
+          </div>
+        </div>
+
+        <div class="form-check mb-3">
+          <input type="checkbox" class="form-check-input" id="hcEditActivo">
+          <label class="form-check-label" for="hcEditActivo">
+            Historia clínica activa
+          </label>
+        </div>
+
+        <!-- NAV TABS -->
+        <ul class="nav nav-tabs" id="hcEditTabs" role="tablist">
+
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#hc-tab-alergias">
+              Alergias
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#hc-tab-ant-medicos">
+              Antecedentes médicos
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#hc-tab-ant-quirurgicos">
+              Antecedentes quirúrgicos
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#hc-tab-ant-familiares">
+              Antecedentes familiares
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#hc-tab-medicamentos">
+              Medicamentos
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#hc-tab-observaciones">
+              Observaciones
+            </a>
+          </li>
+
+        </ul>
+
+        <div class="tab-content mt-3">
+
+          <div class="tab-pane fade show active" id="hc-tab-alergias">
+            <div id="hcEditAlergias"></div>
+            <button type="button" class="btn btn-sm btn-outline-primary btn-add-item mb-3"
+                    data-add-target="hcEditAlergias" data-placeholder="Ej. Penicilina">
+              <i class="fas fa-plus mr-1"></i>Agregar alergia
+            </button>
+          </div>
+
+          <div class="tab-pane fade" id="hc-tab-ant-medicos">
+            <div id="hcEditAntMedicos"></div>
+            <button type="button" class="btn btn-sm btn-outline-primary btn-add-item mb-3"
+                    data-add-target="hcEditAntMedicos" data-placeholder="Ej. Hipertensión arterial">
+              <i class="fas fa-plus mr-1"></i>Agregar antecedente médico
+            </button>
+          </div>
+
+          <div class="tab-pane fade" id="hc-tab-ant-quirurgicos">
+            <div id="hcEditAntQuirurgicos"></div>
+            <button type="button" class="btn btn-sm btn-outline-primary btn-add-item mb-3"
+                    data-add-target="hcEditAntQuirurgicos" data-placeholder="Ej. Apendicectomía 2019">
+              <i class="fas fa-plus mr-1"></i>Agregar antecedente quirúrgico
+            </button>
+          </div>
+
+          <div class="tab-pane fade" id="hc-tab-ant-familiares">
+            <div id="hcEditAntFamiliares"></div>
+            <button type="button" class="btn btn-sm btn-outline-primary btn-add-item mb-3"
+                    data-add-target="hcEditAntFamiliares" data-placeholder="Ej. Diabetes tipo II">
+              <i class="fas fa-plus mr-1"></i>Agregar antecedente familiar
+            </button>
+          </div>
+
+          <div class="tab-pane fade" id="hc-tab-medicamentos">
+            <div id="hcEditMedicamentos"></div>
+            <button type="button" class="btn btn-sm btn-outline-primary btn-add-item mb-3"
+                    data-add-target="hcEditMedicamentos" data-placeholder="Ej. Losartán 50mg">
+              <i class="fas fa-plus mr-1"></i>Agregar medicamento
+            </button>
+          </div>
+
+          <div class="tab-pane fade" id="hc-tab-observaciones">
+            <div class="form-group">
+              <label for="hcEditObservaciones">Observaciones</label>
+              <textarea id="hcEditObservaciones" class="form-control" rows="5"></textarea>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cancelar
+        </button>
+
+        <button type="submit" class="btn btn-info">
+          <i class="fas fa-save mr-1"></i>Guardar cambios
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<div th:replace="~{fragments/layout :: modal-confirmar-eliminar}"></div>
+<div th:replace="~{fragments/layout :: toast-container}"></div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

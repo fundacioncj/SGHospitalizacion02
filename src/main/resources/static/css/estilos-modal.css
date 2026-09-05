@@ -1,0 +1,77 @@
+
+
+/* Tamaño del modal */
+.modal-custom-width {
+    max-width: 680px;
+}
+
+/* Estilo del contenedor del modal */
+.modal-custom-content {
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo del encabezado del modal */
+.modal-custom-header {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 1.5rem;
+}
+
+/* Título del modal */
+.modal-custom-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Botón de cierre del modal */
+.modal-custom-close {
+    color: white;
+    opacity: 0.8;
+}
+
+/* Cuerpo del modal */
+.modal-custom-body {
+    padding: 2rem;
+    background: #f8f9fa;
+}
+
+/* Estilo de las etiquetas de los campos */
+.form-custom-label {
+    color: #444;
+}
+
+/* Estilo de los íconos en los campos */
+.input-custom-text {
+    background: #e9ecef;
+    border: none;
+}
+
+/* Estilo de los campos de entrada */
+.input-custom-field {
+    border-radius: 0 8px 8px 0;
+    border: 1px solid #ced4da;
+}
+
+/* Estilo del botón de búsqueda */
+.btn-custom-search {
+    border-radius: 8px;
+    margin-left: 10px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo del pie del modal */
+.modal-custom-footer {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding: 1.5rem;
+    background: #f8f9fa;
+}
+
+/* Estilo de los botones de acción (Guardar y Cancelar) */
+.btn-custom-action {
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba

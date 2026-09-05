@@ -1,0 +1,168 @@
+/* ============================================================================
+ * SGHospitalización — sgh-clinical.css
+ * -----------------------------------------------------------------------
+ * Este archivo es NUEVO porque app.js hace referencia a clases (tabla,
+ * badges, spinner, toasts, formularios dinámicos) que no existían en
+ * ninguna plantilla del proyecto. Se construyó reutilizando:
+ *   - Los tokens de color/tipografía de AdminLTE (dist/css/adminlte.min.css)
+ *   - La convención "-custom-" y los valores ya definidos en
+ *     static/css/estilos-modal.css y estilos-formulario.css
+ *     (radios, paddings, sombras, colores de fondo)
+ * No se duplica nada que AdminLTE ya resuelva (cards, dropdowns, sidebar).
+ * ==========================================================================*/
+
+/* ---------- Tabla clínica (reutiliza table + table-bordered de AdminLTE) --- */
+.table-clinical {
+  font-family: "Source Sans Pro", sans-serif;
+}
+.table-clinical thead th {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
+}
+.table-clinical .patient-name {
+  font-weight: 600;
+  color: #343a40;
+}
+.table-clinical .patient-id {
+  font-size: .8rem;
+  color: #6c757d;
+}
+
+/* ---------- Badges de estado ------------------------------------------- */
+.badge-estado {
+  display: inline-block;
+  padding: .3rem .65rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+  background: #e9ecef;
+  color: #495057;
+}
+.badge-estado.hospitalizado,
+.badge-estado.activo,
+.badge-estado.activa { background: #d1f5e0; color: #157347; }
+.badge-estado.alta,
+.badge-estado.inactiva { background: #e9ecef; color: #6c757d; }
+.badge-estado.critico,
+.badge-estado.critica { background: #fde2e1; color: #b02a37; }
+.badge-estado.en-observacion { background: #fff3cd; color: #997404; }
+
+/* ---------- Botones de acción por fila (usa btn-custom-action como base) - */
+.row-actions { display: flex; gap: .35rem; justify-content: flex-end; }
+.btn-icon {
+  border: none;
+  /*background: #e3f829;*/
+  color: #565749;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+}
+.btn-icon:hover { background: #0d6efd; color: #fff; }
+.btn-icon.danger:hover { background: #dc3545; color: #fff; }
+
+/* ---------- Spinner de carga -------------------------------------------- */
+.spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+  padding: 2.5rem 1rem;
+  color: #6c757d;
+}
+.spinner-clinical {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid #e9ecef;
+  border-top-color: #0d6efd;
+  border-radius: 50%;
+  animation: sgh-spin .8s linear infinite;
+}
+@keyframes sgh-spin { to { transform: rotate(360deg); } }
+
+/* ---------- Estado vacío -------------------------------------------------*/
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+}
+.empty-state i { font-size: 2.5rem; color: #adb5bd; margin-bottom: .75rem; display: block; }
+.empty-state h4 { color: #495057; margin-bottom: .35rem; }
+
+/* ---------- Toasts clínicos (delegan color en variante bootstrap) ------- */
+.toast-clinical { min-width: 300px; }
+.toast-clinical.success .toast-header { color: #157347; }
+.toast-clinical.danger .toast-header { color: #b02a37; }
+.toast-clinical.info .toast-header { color: #0d6efd; }
+
+/* ---------- Detalle en modales "Ver" (grid de solo lectura) ------------- */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.detail-item.full-width { grid-column: 1 / -1; }
+.detail-label {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: #6c757d;
+  margin-bottom: .15rem;
+}
+.detail-value { color: #212529; }
+.section-code {
+  display: inline-block;
+  background: #e7f1ff;
+  color: #0d6efd;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .15rem .5rem;
+  border-radius: 6px;
+  margin-right: .5rem;
+}
+.form-section-title {
+  font-weight: 600;
+  color: #343a40;
+  margin: 1rem 0 .5rem;
+  padding-bottom: .25rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* ---------- Listas dinámicas (alergias, antecedentes, medicamentos) ----- */
+.dynamic-list-item {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+.dynamic-list-item input { flex: 1; }
+.dynamic-list-empty { color: #adb5bd; font-size: .85rem; }
+
+/* ---------- Campo "toggle" del formulario de Anamnesis ------------------ */
+.toggle-field {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: .6rem .75rem;
+  margin-bottom: .6rem;
+  transition: all .2s;
+}
+.toggle-field.is-checked { border-color: #0d6efd; background: #f4f8ff; }
+.toggle-field textarea { margin-top: .5rem; }
+
+.form-label-sm {
+  font-size: .8rem;
+  font-weight: 500;
+  color: #444; /* mismo tono que .form-custom-label del ZIP */
+  margin-bottom: .25rem;
+  display: block;
+}
+
+/* ---------- Reloj de encabezado (detalle "monitor") ---------------------- */
+.nav-clock {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #495057;
+}

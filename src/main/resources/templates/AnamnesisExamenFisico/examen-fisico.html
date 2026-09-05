@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <nav th:replace="~{fragments/layout :: header}"></nav>
+  <aside th:replace="~{fragments/layout :: sidebar}" th:with="activePage='examen-fisico'"></aside>
+
+  <div class="content-wrapper">
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1><i class="fas fa-stethoscope mr-2"></i>Anamnesis | Examen Físico</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li class="breadcrumb-item active">Anamnesis | Examen Físico</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+
+        <div class="card card-outline card-info">
+          <div class="card-body">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text input-custom-text"><i class="fas fa-id-card"></i></span>
+              </div>
+              <input type="text" id="examCedulaInput" class="form-control input-custom-field" placeholder="Ingresa el número de cédula del paciente..." maxlength="10" inputmode="numeric">
+              <div class="input-group-append">
+                <button id="examBuscarBtn" type="button" class="btn btn-info btn-custom-search">
+                  <i class="fas fa-search mr-1"></i>Buscar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-notes-medical mr-2"></i>Anamnesis | Exámenes Físicos registrados</h3>
+          </div>
+          <div class="card-body p-0">
+            <div id="examResultados">
+              <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h4>Busca un paciente</h4>
+                <p>Ingresa una cédula y presiona "Buscar" para ver sus exámenes físicos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<!-- MODAL VER -->
+<div class="modal fade" id="modalExamVer" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-custom-width modal-dialog-centered" role="document">
+    <div class="modal-content modal-custom-content">
+
+      <div class="modal-header modal-custom-header bg-info">
+        <div>
+          <h5 class="modal-title modal-custom-title text-white mb-0">
+            <i class="fas fa-stethoscope mr-2"></i>Detalle de examen físico
+          </h5>
+          <small id="examVerSubtitle" class="text-white-50"></small>
+        </div>
+        <button type="button" class="close modal-custom-close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body modal-custom-body">
+        <div id="examVerContenido" class="detail-grid"></div>
+      </div>
+
+      <div class="modal-footer modal-custom-footer">
+        <button type="button" class="btn btn-secondary btn-custom-action" data-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/layout :: toast-container}"></div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,154 @@
+/*  Consulta */
+        .medical-header {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            padding: 15px 0;
+        }
+        .section-title {
+            background-color: #17A2BB;
+            color: white;
+            padding: 8px 15px;
+            margin-top: 20px;
+            border-left: 6px solid #007bff;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .medical-card {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .medical-card-header {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: bold;
+        }
+        .medical-card-body {
+            padding: 15px;
+        }
+        .diagnosis-badge {
+            font-size: 0.85rem;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+        .badge-presuntivo {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .badge-definitivo {
+            background-color: #28a745;
+            color: white;
+        }
+        .constantes-table th {
+            background-color: #f8f9fa;
+        }
+        .system-review-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+    /* End Consulta */
+
+
+    /*  Signo */
+        .medical-form-sig {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .section-title-sig {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .patient-info-card-sig {
+            border-left: 4px solid #007bff;
+            margin-bottom: 20px;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .readonly-info-sig {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+
+        .nav-tabs .nav-link.active {
+            font-weight: bold;
+            border-bottom: 3px solid #007bff;
+        }
+        .funciones-biológicas-panel {
+            transition: all 0.3s ease;
+        }
+
+        .readonly-info {
+                    background-color: #e9ecef;
+                    padding: 8px;
+                    border-radius: 4px;
+                    min-height: 38px;
+                    margin-bottom: 0;
+                }
+
+        .patient-info-card {
+            border-left: 4px solid #007bff;
+            margin-bottom: 20px;
+        }
+        .border-top {
+            border-top: 1px solid #dee2e6 !important;
+        }
+     /* End Signo */
+
+   /* Patología */
+        .medical-form-pato {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .section-title-pato {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .patient-info-card-sig-pato {
+            border-left: 4px solid #007bff;
+            margin-bottom: 20px;
+        }
+        .checkbox-group {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            background-color: white;
+        }
+        .tab-content {
+            padding-top: 20px;
+        }
+        .btn-action {
+            min-width: 120px;
+            margin: 5px;
+        }
+        .diagnostico-item {
+            border-left: 3px solid #007bff;
+            padding-left: 10px;
+            margin-bottom: 15px;
+        }
+
+     /* End Patología */

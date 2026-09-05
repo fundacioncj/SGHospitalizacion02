@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <nav th:replace="~{fragments/layout :: header}"></nav>
+  <aside th:replace="~{fragments/layout :: sidebar}" th:with="activePage='anamnesis'"></aside>
+
+  <div class="content-wrapper">
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1><i class="fas fa-clipboard-list mr-2"></i>Anamnesis</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="hospitalizacion.html">Inicio</a></li>
+              <li class="breadcrumb-item active">Anamnesis</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+
+        <div class="card card-outline card-info">
+          <div class="card-body">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text input-custom-text"><i class="fas fa-id-card"></i></span>
+              </div>
+              <input type="text" id="anCedulaInput" class="form-control input-custom-field"
+                      placeholder="Ingresa el número de cédula del paciente..." maxlength="10" inputmode="numeric" />
+              <div class="input-group-append">
+                <button id="anBuscarBtn" type="button" class="btn btn-info btn-custom-search">
+                  <i class="fas fa-search mr-1"></i>Buscar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-list mr-2"></i>Registros de anamnesis</h3>
+          </div>
+          <div class="card-body p-0">
+            <div id="anResultados">
+              <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h4>Busca un paciente</h4>
+                <p>Ingresa una cédula y presiona "Buscar" para ver sus registros de anamnesis.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL VER — acordeón, generado por construirVistaAnamnesis() -->
+<!-- ============================================================ -->
+<div class="modal fade" id="modalAnVer" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-custom-width modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content modal-custom-content">
+      <div class="modal-header modal-custom-header bg-info">
+        <div>
+          <h5 class="modal-title modal-custom-title text-white mb-0">
+            <i class="fas fa-clipboard-list mr-2"></i>Detalle de anamnesis
+          </h5>
+          <small id="anVerSubtitle" class="text-white-30"></small>
+        </div>
+        <button type="button" class="close modal-custom-close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-custom-body">
+        <div class="accordion" id="anVerAccordion"></div>
+      </div>
+      <div class="modal-footer modal-custom-footer">
+        <button type="button" class="btn btn-secondary btn-custom-action" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL EDITAR — formulario declarativo (ANAMNESIS_SCHEMA).
+     Cada pestaña == un "contenedor" del schema. app.js inyecta los
+     campos dentro de cada div id (construirFormularioAnamnesis()).
+     Se usan pestañas Bootstrap nativas (data-toggle="tab"), ya
+     incluidas en bootstrap.bundle.min.js: no se agrega JS nuevo. -->
+<!-- ============================================================ -->
+<div class="modal fade" id="modalAnEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <form id="formAnEditar" class="modal-content modal-custom-content">
+      <div class="modal-header modal-custom-header bg-info">
+        <div>
+          <h5 class="modal-title modal-custom-title text-white mb-0">
+            <i class="fas fa-pen mr-2"></i>Editar anamnesis
+          </h5>
+          <small id="anEditarSubtitle" class="text-white-50"></small>
+        </div>
+        <button type="button" class="close modal-custom-close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body modal-custom-body p-0">
+        <input type="hidden" id="anEditId" />
+
+        <ul class="nav nav-tabs px-3 pt-2 bg-white" id="anEditTabs" role="tablist">
+          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#anTabDatosGenerales"><span class="section-code">AN-01</span>Generales</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#anTabMotivoConsulta"><span class="section-code">AN-02</span>Motivo</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#anTabAntPersonales"><span class="section-code">AN-03</span>Ant. personales</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#anTabGineco"><span class="section-code">AN-04</span>Gineco / Andrológico</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#anTabAntFamiliares"><span class="section-code">AN-06</span>Familiares</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#anTabEnfermedadActual"><span class="section-code">AN-07</span>Enf. actual</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#anTabRevisionSistemas"><span class="section-code">AN-08</span>Rev. sistemas</a></li>
+        </ul>
+
+        <div class="tab-content p-3" style="max-height: 55vh; overflow-y: auto;">
+          <div class="tab-pane fade show active" id="anTabDatosGenerales">
+            <div id="anFieldsDatosGenerales" class="detail-grid"></div>
+          </div>
+          <div class="tab-pane fade" id="anTabMotivoConsulta">
+            <div id="anFieldsMotivoConsulta" class="detail-grid"></div>
+          </div>
+          <div class="tab-pane fade" id="anTabAntPersonales">
+            <div id="anFieldsAntecedentesPersonales"></div>
+          </div>
+          <div class="tab-pane fade" id="anTabGineco">
+            <div id="anFieldsGineco"></div>
+          </div>
+          <div class="tab-pane fade" id="anTabAntFamiliares">
+            <div id="anFieldsAntecedentesFamiliares"></div>
+          </div>
+          <div class="tab-pane fade" id="anTabEnfermedadActual">
+            <div id="anFieldsEnfermedadActual" class="detail-grid"></div>
+          </div>
+          <div class="tab-pane fade" id="anTabRevisionSistemas">
+            <div id="anFieldsRevisionSistemas"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer modal-custom-footer">
+        <button type="button" class="btn btn-secondary btn-custom-action" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-info btn-custom-action">
+          <i class="fas fa-save mr-1"></i>Guardar cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!--
+  NOTA: el enunciado original dice que Anamnesis NO tiene "Eliminar",
+  pero mostrarTablaAnamnesis() en app.js SÍ renderiza un botón
+  data-accion="eliminar" que llama a solicitarEliminacion(), la cual
+  abre este modal compartido. Como la instrucción prioritaria fue "no
+  reescribir la lógica de app.js", se incluye el modal para que ese
+  botón (ya presente en el JS) no falle. Si no lo quieres, dímelo y
+  quito el botón "eliminar" en mostrarTablaAnamnesis().
+-->
+<div th:replace="~{fragments/layout :: modal-confirmar-eliminar}"></div>
+<div th:replace="~{fragments/layout :: toast-container}"></div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

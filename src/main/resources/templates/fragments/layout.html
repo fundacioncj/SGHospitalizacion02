@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<!--
+  fragments/layout.html
+  Fragmentos reutilizables en las 3 páginas del módulo (Hospitalización,
+  Historia Clínica, Anamnesis). Estructura de header/sidebar/footer tomada
+  de static/index.html (AdminLTE 3) y renombrada a la marca del sistema.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>fragments</title></head>
+<body>
+
+<!-- ============================================================ -->
+<!-- HEAD: metatags + hojas de estilo (mismo orden que static/index.html) -->
+<!-- ============================================================ -->
+<th:block th:fragment="head">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title th:text="${titulo} + ' · SGHospitalización'">SGHospitalización</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+  <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}" />
+  <link rel="stylesheet" th:href="@{/plugins/icheck-bootstrap/icheck-bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}" />
+  <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}" />
+  <link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}" />
+  <link rel="stylesheet" th:href="@{/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}" />
+
+  <!-- Estilos propios del proyecto (ya existían en el ZIP) -->
+  <link rel="stylesheet" th:href="@{/css/estilos-modal.css}" />
+  <link rel="stylesheet" th:href="@{/css/estilos-formulario.css}" />
+  <link rel="stylesheet" th:href="@{/css/sidebar.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+  <!-- Nuevo: únicamente las clases que app.js necesita y no existían -->
+  <link rel="stylesheet" th:href="@{/css/sgh-clinical.css}" />
+
+  <!-- Bootstrap Icons: app.js usa clases "bi bi-*" para íconos de acciones -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+</th:block>
+
+<!-- ============================================================ -->
+<!-- HEADER: barra superior con reloj (usa #navClockReadout de app.js) -->
+<!-- ============================================================ -->
+<nav th:fragment="header" class="main-header navbar navbar-expand navbar-white navbar-light">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+    </li>
+    <li class="nav-item d-none d-sm-inline-block">
+      <span class="nav-link disabled">Sistema de Gestión Hospitalaria</span>
+    </li>
+  </ul>
+
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item d-none d-md-inline-block">
+      <span class="nav-link">
+        <i class="far fa-clock mr-1"></i>
+        <span id="navClockReadout" class="nav-clock">--:--:--</span>
+      </span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-widget="fullscreen" href="#" role="button"><i class="fas fa-expand-arrows-alt"></i></a>
+    </li>
+  </ul>
+</nav>
+
+<!-- ============================================================ -->
+<!-- SIDEBAR: navegación entre las 3 páginas independientes -->
+<!-- Modelo esperado: variable "activePage" con valores:            -->
+<!-- "hospitalizacion" | "historiaClinica" | "anamnesis"             -->
+<!-- ============================================================ -->
+<aside th:fragment="sidebar" class="main-sidebar sidebar-dark-primary elevation-4">
+  <a href="/home" class="brand-link brand-logo-fix">
+    <img src="/dist/img/caminando.png" alt="Caminando Logo" class="brand-image img-circle elevation-3 " style="opacity: .8">
+    <span class="brand-text font-weight-light">Caminando Juntos</span>
+  </a>
+
+  <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="image">
+        <img th:src="@{/dist/img/user2-160x160.jpg}"
+             class="img-circle elevation-2"
+             alt="User Image">
+    </div>
+
+    <div class="info">
+        <a th:href="@{/home}" class="d-block">
+        ADMIN
+        </a>
+    </div>
+</div>
+
+  <div class="sidebar">
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-procedures"></i><p>Hospitalización<i class="fas fa-angle-left right"></i></p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a th:href="@{/hospitalizacion}" th:classappend="${activePage == 'hospitalizacion'} ? 'active'" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Buscar Hospitalización</p></a></li>
+            <li class="nav-item"><a th:href="@{/hospitalizacion/crearHospitalizacion}" th:classappend="${activePage == 'crearHospitalizacion'} ? 'active'" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Crear Hospitalización</p></a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-notes-medical"></i><p>Historia Clínica<i class="fas fa-angle-left right"></i></p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a th:href="@{/historia-clinica}" th:classappend="${activePage == 'historia-clinica'} ? 'active'" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Buscar Historia Clínica</p></a></li>
+            <li class="nav-item"><a th:href="@{/historia-clinica/crearHistoriaClinica}" th:classappend="${activePage == 'crearHistoriaClinica'} ? 'active'" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Crear Historia Clínica</p></a></li>
+          </ul>
+        </li>
+
+        <!-- <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-clipboard-list"></i><p>Anamnesis<i class="fas fa-angle-left right"></i></p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a th:href="@{/anamnesis}" th:classappend="${activePage == 'anamnesis'} ? 'active'" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Buscar Anamnesis</p></a></li>
+            <li class="nav-item"><a th:href="@{/anamnesis/crearAnamnesis}" th:classappend="${activePage == 'crearAnamnesis'} ? 'active'" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Crear Anamnesis</p></a></li>
+          </ul>
+        </li> -->
+
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-file-medical"></i><p>Anamnesis | Ex Físico<i class="fas fa-angle-left right"></i></p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a th:href="@{/examen-fisico}" th:classappend="${activePage == 'examen-fisico'} ? 'active'" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Buscar Anamnesis | Ex Físico</p></a></li>
+            <li class="nav-item">
+              <a th:href="@{/anamnesis-examen-fisico}" th:classappend="${activePage == 'anamnesis-examen-fisico'} ? 'active'" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Crear Anamnesis | Ex Físico</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<footer th:fragment="footer" class="main-footer">
+  <strong>&copy; 2026 Universidad de Guayaquil · SGHospitalización.</strong>
+  <div class="float-right d-none d-sm-inline-block">
+    <b>Versión</b> 1.0.0
+  </div>
+</footer>
+
+<!-- ============================================================ -->
+<!-- TOAST CONTAINER: requerido por mostrarToast() en app.js -->
+<!-- ============================================================ -->
+<div th:fragment="toast-container"
+     id="toastContainer"
+     class="toast-container position-fixed top-0 right-0 p-3"
+     style="z-index: 1090; top: 65px !important; right: 15px !important;">
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN (compartido por los 3 módulos) -->
+<!-- Requerido por solicitarEliminacion()/simularEliminar() en app.js -->
+<!-- Reutiliza las clases modal-custom-* definidas en estilos-modal.css -->
+<!-- ============================================================ -->
+<div th:fragment="modal-confirmar-eliminar"
+    class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-custom-width modal-dialog-centered">
+    <div class="modal-content modal-custom-content">
+      <div class="modal-header modal-custom-header bg-danger">
+        <h5 class="modal-title modal-custom-title text-white">
+          <i class="fas fa-exclamation-triangle mr-2"></i>Confirmar eliminación
+        </h5>
+        <button type="button" class="close modal-custom-close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-custom-body">
+        <p id="confirmarEliminarTexto" class="mb-0">¿Deseas eliminar este registro?</p>
+      </div>
+      <div class="modal-footer modal-custom-footer">
+        <button type="button" class="btn btn-secondary btn-custom-action" data-dismiss="modal">Cancelar</button>
+        <button type="button" id="btnConfirmarEliminar" class="btn btn-danger btn-custom-action">
+          <i class="fas fa-trash mr-1"></i>Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS: mismo orden que static/index.html + app.js del proyecto -->
+<!-- ============================================================ -->
+<th:block th:fragment="scripts">
+
+  <!-- Librerías -->
+  <script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+  <script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+  <script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
+  <script th:src="@{/dist/js/adminlte.min.js}"></script>
+
+
+  <!-- Core -->
+  <script th:src="@{/js/core/api.js}"></script>
+  <script th:src="@{/js/core/helpers.js}"></script>
+  <script th:src="@{/js/core/validators.js}"></script>
+  <script th:src="@{/js/core/ui.js}"></script>
+  <script th:src="@{/js/core/events.js}"></script>
+
+
+  <!-- Shared -->
+  <script th:src="@{/js/shared/formularios.js}"></script>
+  <script th:src="@{/js/shared/modals.js}"></script>
+
+  <!-- Modules -->
+  <script th:src="@{/js/modules/paciente.js}"></script>
+  <script th:src="@{/js/modules/medico.js}"></script>
+  <script th:src="@{/js/modules/hospitalizacion.js}"></script>
+  <script th:src="@{/js/modules/historiaClinica.js}"></script>
+  <script th:src="@{/js/modules/anamnesis.js}"></script>
+  <script th:src="@{/js/modules/crear-anamnesis.js}"></script>
+  <script th:src="@{/js/modules/examen-fisico.js}"></script>
+  <script th:src="@{/js/modules/crearAnamnesisExamenFisico.js}"></script>
+  <script th:src="@{/js/modules/verHospitalizacion.js}"></script>
+  <script th:src="@{/js/modules/editarHospitalizacion.js}"></script>
+  <script th:src="@{/js/modules/verHistoriaClinica.js}"></script>
+  <script th:src="@{/js/modules/editarHistoriaClinica.js}"></script>
+
+  <script th:src="@{/js/modules/verAnamnesisExamenFisico.js}"></script>
+
+  <!-- App -->
+  <script th:src="@{/js/app.js}"></script>
+
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:with="activePage='anamnesisExamenFisico'">
+<head><th:block th:replace="~{fragments/layout :: head}"></th:block>
+<style>
+:root{--em-normal:#d7dee6;--em-normal-stroke:#aab6c4;--em-observacion:#ffc107;--em-observacion-stroke:#c98d0a;--em-patologia:#dc3545;--em-patologia-stroke:#b02a2a;--em-hover-stroke:#17a2b8}
+.section-code{display:inline-block;font-size:10.5px;font-weight:700;color:#6c757d;background:#eef2f7;border-radius:4px;padding:1px 5px;margin-right:6px}
+.em-body-stage{display:flex;justify-content:center;background:#fbfcfe;border:1px solid #e1e7ef;border-radius:6px;padding:14px;min-height:420px}
+.em-body-view{display:flex;justify-content:center;width:100%}
+.em-body-view svg{max-height:440px;width:auto}
+.region-shape{fill:var(--em-normal);stroke:var(--em-normal-stroke);stroke-width:1.4;cursor:pointer;transition:fill .15s ease,stroke .15s ease,opacity .15s ease}
+.region-group:hover .region-shape{stroke:var(--em-hover-stroke);stroke-width:2.2;opacity:.92}
+.em-dot-normal{color:var(--em-normal);font-size:8px}
+.region-row{display:flex;align-items:center;gap:9px;padding:6px 4px;font-size:13px;border-top:1px solid #f0f3f7;cursor:pointer}
+.region-row:first-child{border-top:none}
+.region-row:hover{background:#eaf2fb}
+.region-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;flex-shrink:0}
+.region-row__label{flex:1}
+.region-row__dot{width:9px;height:9px;border-radius:50%;background:var(--em-normal);border:1px solid var(--em-normal-stroke);flex-shrink:0}
+.region-row__dot[data-estado=observacion]{background:var(--em-observacion);border-color:var(--em-observacion-stroke)}
+.region-row__dot[data-estado=patologia]{background:var(--em-patologia);border-color:var(--em-patologia-stroke)}
+.em-obs-card{border:1px solid #e1e7ef;border-radius:6px;padding:10px;background:#fbfcfe;margin-bottom:10px}
+.em-obs-card__header{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12.5px;font-weight:700}
+.em-obs-card textarea{width:100%;min-height:64px;resize:vertical;border:1px solid #e1e7ef;border-radius:4px;padding:6px 8px;font-size:13px;font-family:inherit}
+.em-obs-card textarea:focus{outline:none;border-color:#17a2b8;box-shadow:0 0 0 3px rgba(23,162,184,.15)}
+.em-tooltip{position:fixed;z-index:1090;background:#1c2733;color:#fff;font-size:12px;padding:5px 10px;border-radius:6px;pointer-events:none;transform:translate(-50%,-130%);white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.dx-input{width:100%;border:1px solid transparent;border-radius:4px;padding:6px 8px;font-size:13.5px;font-family:inherit;background:transparent}
+.dx-input:hover{border-color:#e1e7ef}
+.dx-input:focus{outline:none;border-color:#17a2b8;background:#fff;box-shadow:0 0 0 3px rgba(23,162,184,.15)}
+.dx-toggle{width:32px;height:32px;border-radius:4px;border:1px solid #e1e7ef;background:#fff;color:var(--em-patologia);font-weight:700;line-height:1;cursor:pointer}
+.dx-toggle:hover{border-color:var(--em-patologia)}
+.dx-toggle.is-active{background:#fdecec;border-color:var(--em-patologia)}
+.dx-delete{border:none;background:none;cursor:pointer;color:#6c757d;border-radius:4px;padding:6px}
+.dx-delete:hover{background:#fdecec;color:var(--em-patologia)}
+</style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <nav th:replace="~{fragments/layout :: header}"></nav>
+  <aside th:replace="~{fragments/layout :: sidebar}" th:with="activePage='crearAnamnesis'"></aside>
+
+  <div class="content-wrapper">
+
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0"><i class="fas fa-stethoscope mr-2"></i> Anamnesis y Examen Físico</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+              <li class="breadcrumb-item"><a th:href="@{/anamnesis}">Anamnesis | ExamenFisico</a></li> <!--Aqui antes estaba solo Anamnesis-->
+              <li class="breadcrumb-item active" id="breadcrumbModo">Crear</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card card-info card-outline">
+
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-notes-medical mr-1"></i> Anamnesis y Examen Físico</h3>
+          </div>
+
+          <form id="formAnCrear" autocomplete="off">
+            <div class="card-body">
+
+              <ul class="nav nav-tabs" id="anCrearTabs" role="tablist">
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#pane-datos-personales">Datos Personales</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pane-antecedentes">Antecedentes</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pane-constantes-vitales">Constantes Vitales</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pane-examen-fisico">Examen Físico</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pane-diagnostico-tratamiento">Diagnóstico y Tratamiento</a></li>
+              </ul>
+
+              <div class="tab-content border border-top-0 p-3">
+
+                <div class="tab-pane fade show active" id="pane-datos-personales">
+
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header bg bg-info">
+                      <h5 class="mb-0">AN-01 DATOS GENERALES DEL PACIENTE</h5>
+                    </div>
+
+                    <div class="card-body">
+                      <div class="form-row">
+
+                        <div class="form-group col-md-4">
+                          <label>Fecha de registro</label>
+                          <input type="date" class="form-control" id="anCrear_fechaRegistro">
+                        </div>
+
+                        <div class="form-group col-md-4">
+                          <label>Cédula del paciente</label>
+                          <input type="text" class="form-control" id="anCrear_cedulaPaciente">
+                        </div>
+
+                        <div class="form-group col-md-4">
+                          <label>Médico responsable</label>
+                          <select class="form-control" id="anCrear_cedulaMedico">
+                            <option value="">Seleccionar médico...</option>
+                          </select>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header bg bg-info">
+                      <h5 class="card-title mb-0">AN-02 MOTIVO CONSULTA</h5>
+                    </div>
+
+                    <div class="card-body">
+                      <div class="form-group mb-0">
+                        <label>Motivo de consulta</label>
+                        <textarea class="form-control"
+                                  id="anCrear_motivoConsulta"
+                                  rows="2"
+                                  placeholder="Describa el motivo principal de consulta..."></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card card-info card-outline mb-4" id="pane-an03">
+                    <div class="card-header bg bg-info">
+                      <h5 class="card-title mb-0">AN-03 ANTECEDENTES PATOLÓGICOS PERSONALES</h5>
+                    </div>
+
+                    <div class="card-body">
+                      <div class="form-row">
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_alergiaMedicamentos" data-target="anCrear_descripcionAlergias">
+                              <label class="form-check-label">Alergia a medicamentos</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionAlergias" rows="1.5" disabled placeholder="Detalle de alergias..."></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="anCrear_otrasAlergias">
+                              <label class="form-check-label">Otras alergias</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_vacunas" data-target="anCrear_descripcionVacunas">
+                              <label class="form-check-label">Esquema de vacunación</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionVacunas" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_patologiasClinicas" data-target="anCrear_descripcionPatologiasClinicas">
+                              <label class="form-check-label">Patologías clínicas</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionPatologiasClinicas" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_medicacionHabitual" data-target="anCrear_descripcionMedicacionHabitual">
+                              <label class="form-check-label">Medicación habitual</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionMedicacionHabitual" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_antecedentesQuirurgicos" data-target="anCrear_descripcionAntecedentesQuirurgicos">
+                              <label class="form-check-label">Antecedentes quirúrgicos</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionAntecedentesQuirurgicos" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_habitos" data-target="anCrear_descripcionHabitos">
+                              <label class="form-check-label">Hábitos</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionHabitos" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_condicionSocioeconomica" data-target="anCrear_descripcionCondicionSocioeconomica">
+                              <label class="form-check-label">Condición socioeconómica relevante</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionCondicionSocioeconomica" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_discapacidad" data-target="anCrear_descripcionDiscapacidad">
+                              <label class="form-check-label">Discapacidad</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionDiscapacidad" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_religion" data-target="anCrear_descripcionReligion">
+                              <label class="form-check-label">Religión relevante</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionReligion" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 px-3">
+                          <div class="form-group mb-0">
+                            <div class="form-check">
+                              <input class="form-check-input toggle-check" type="checkbox" id="anCrear_tipificacionSanguinea" data-target="anCrear_descripcionTipificacionSanguinea">
+                              <label class="form-check-label">Tipificación sanguínea</label>
+                            </div>
+                            <textarea class="form-control mt-2" id="anCrear_descripcionTipificacionSanguinea" rows="1.5" disabled></textarea>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="tab-pane fade" id="pane-antecedentes">
+
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header bg bg-info">
+                      <h5 class="mb-0">AN-04 GINECO-OBSTÉTRICOS / ANDROLÓGICOS</h5>
+                    </div>
+
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label>Sexo</label>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" class="custom-control-input" id="anCrear_sexoMujer" name="anCrear_sexo" value="MUJER">
+                          <label class="custom-control-label" for="anCrear_sexoMujer">Mujer</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" class="custom-control-input" id="anCrear_sexoHombre" name="anCrear_sexo" value="HOMBRE">
+                          <label class="custom-control-label" for="anCrear_sexoHombre">Hombre</label>
+                        </div>
+                      </div>
+
+                      <div id="anCrear_ginecologico" style="display:none;">
+                                                <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <label>Edad de menarquia</label>
+                            <input type="number" class="form-control" id="anCrear_edadMenarquia">
+                          </div>
+
+                          <div class="form-group col-md-3">
+                            <label>Edad de menopausia</label>
+                            <input type="number" class="form-control" id="anCrear_edadMenopausia">
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label>Ciclos</label>
+                            <input type="text" class="form-control" id="anCrear_ciclos">
+                          </div>
+
+                          <div class="form-group col-md-3">
+                            <label>Edad inicio vida sexual</label>
+                            <input type="number" class="form-control" id="anCrear_edadInicioVidaSexual">
+                          </div>
+
+                          <div class="form-group col-md-2">
+                            <label>Gestas</label>
+                            <input type="number" class="form-control" id="anCrear_numeroGestas">
+                          </div>
+
+                          <div class="form-group col-md-2">
+                            <label>Partos</label>
+                            <input type="number" class="form-control" id="anCrear_numeroPartos">
+                          </div>
+
+                          <div class="form-group col-md-2">
+                            <label>Abortos</label>
+                            <input type="number" class="form-control" id="anCrear_numeroAbortos">
+                          </div>
+
+                          <div class="form-group col-md-2">
+                            <label>Cesáreas</label>
+                            <input type="number" class="form-control" id="anCrear_numeroCesareas">
+                          </div>
+
+                          <div class="form-group col-md-3">
+                            <label>Hijos vivos</label>
+                            <input type="number" class="form-control" id="anCrear_numeroHijosVivos">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                            <label>Última menstruación</label>
+                            <input type="date" class="form-control" id="anCrear_fechaUltimaMenstruacion">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                            <label>Último parto</label>
+                            <input type="date" class="form-control" id="anCrear_fechaUltimoParto">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                            <label>Última citología cervical</label>
+                            <input type="date" class="form-control" id="anCrear_fechaUltimaCitologiaCervical">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                            <label>Última colposcopia</label>
+                            <input type="date" class="form-control" id="anCrear_fechaUltimaColposcopia">
+                          </div>
+
+                          <div class="form-group col-md-4">
+                            <label>Última mamografía</label>
+                            <input type="date" class="form-control" id="anCrear_fechaUltimaMamografia">
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label>Método planificación familiar</label>
+                            <input type="text" class="form-control" id="anCrear_metodoPlanificacionFamiliar">
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label>Terapia hormonal</label>
+                            <input type="text" class="form-control" id="anCrear_terapiaHormonal">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div id="anCrear_andrologico" style="display:none;">
+                        <h6 class="font-weight-bold border-bottom pb-2">Datos andrológicos</h6>
+
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label>Último antígeno prostático</label>
+                            <input type="date" class="form-control" id="anCrear_fechaUltimoAntigenoProstatico">
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label>Último eco prostático</label>
+                            <input type="date" class="form-control" id="anCrear_fechaUltimoEcoProstatico">
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header bg bg-info">
+                      <h5 class="mb-0">AN-05 ANTECEDENTES FAMILIARES</h5>
+                    </div>
+
+                    <div class="card-body">
+
+                      <div class="form-row">
+                        <div class="col-md-6">
+                          <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="anCrear_familiarCardiopatia"><label class="form-check-label">Cardiopatía</label></div>
+                          <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="anCrear_familiarHipertension"><label class="form-check-label">Hipertensión</label></div>
+                          <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="anCrear_familiarEnfermedadCerebroVascular"><label class="form-check-label">Enfermedad cerebrovascular</label></div>
+                          <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="anCrear_familiarCancer"><label class="form-check-label">Cáncer</label></div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="anCrear_familiarTuberculosis"><label class="form-check-label">Tuberculosis</label></div>
+                          <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="anCrear_familiarEnfermedadMental"><label class="form-check-label">Enfermedad mental</label></div>
+                          <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="anCrear_familiarMalformacion"><label class="form-check-label">Malformación</label></div>
+                        </div>
+                      </div>
+
+                      <div class="form-check mt-3">
+                        <input class="form-check-input toggle-check" type="checkbox" id="anCrear_familiarOtro" data-target="anCrear_familiarOtroDescripcion">
+                        <label class="form-check-label">Otro</label>
+                      </div>
+
+                      <textarea class="form-control mt-2" id="anCrear_familiarOtroDescripcion" rows="2" disabled></textarea>
+
+                    </div>
+                  </div>
+
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header bg bg-info">
+                      <h5 class="mb-0">AN-06 ENFERMEDAD ACTUAL</h5>
+                    </div>
+
+                    <div class="card-body">
+                      <textarea class="form-control" id="anCrear_enfermedadActual" rows="2" placeholder="Describe cronológicamente la enfermedad actual..."></textarea>
+                    </div>
+                  </div>
+
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header bg bg-info">
+                      <h5 class="mb-0">AN-07 REVISIÓN POR SISTEMAS</h5>
+                    </div>
+
+                    <div class="card-body">
+
+                      <div class="form-row">
+
+                        <div class="col-md-6">
+                          <div class="form-check">
+                            <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaPielAnexos" data-target="anCrear_descripcionPielAnexos">
+                            <label class="form-check-label">Piel y anexos</label>
+                          </div>
+                          <textarea class="form-control mt-2 mb-3" rows="1.5" id="anCrear_descripcionPielAnexos" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-check">
+                            <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaRespiratorio" data-target="anCrear_descripcionRespiratorio">
+                            <label class="form-check-label">Respiratorio</label>
+                          </div>
+                          <textarea class="form-control mt-2 mb-3" rows="1.5" id="anCrear_descripcionRespiratorio" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-check">
+                            <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaCardiovascular" data-target="anCrear_descripcionCardiovascular">
+                            <label class="form-check-label">Cardiovascular</label>
+                          </div>
+                          <textarea class="form-control mt-2 mb-3" rows="1.5" id="anCrear_descripcionCardiovascular" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-check">
+                            <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaDigestivo" data-target="anCrear_descripcionDigestivo">
+                            <label class="form-check-label">Digestivo</label>
+                          </div>
+                          <textarea class="form-control mt-2 mb-3" rows="1.5" id="anCrear_descripcionDigestivo" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-check">
+                            <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaNervioso" data-target="anCrear_descripcionNervioso">
+                            <label class="form-check-label">Nervioso</label>
+                          </div>
+                          <textarea class="form-control mt-2" rows="1.5" id="anCrear_descripcionNervioso" disabled></textarea>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <!-- <div class="card-footer bg-white text-right mt-3">
+                    <button type="button" class="btn btn-secondary mr-2">
+                      Cancelar
+                    </button>
+
+                    <button type="button" class="btn btn-info" id="btnGuardarAnamnesis">
+                      <i class="fas fa-save mr-1"></i>
+                      Guardar Anamnesis
+                    </button>
+                  </div> -->
+
+                </div>
+
+                
+
+                <div class="tab-pane fade" id="pane-constantes-vitales">
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header"><h5 class="mb-0">EM-01 CONSTANTES VITALES Y ANTROPOMETRÍA</h5></div>
+                    <div class="card-body">
+                      <div class="form-row" id="examCvForm">
+                        <div class="form-group col-md-4"><label>Temperatura (°C)</label><input type="number" step="0.1" class="form-control" data-field="temperatura" placeholder="36.5"></div>
+                        <div class="form-group col-md-4"><label>Presión Arterial (mmHg)</label><input type="text" class="form-control" data-field="presionArterial" placeholder="120/80"></div>
+                        <div class="form-group col-md-4"><label>Pulso (/min)</label><input type="number" class="form-control" data-field="pulso" placeholder="72"></div>
+                        <div class="form-group col-md-4"><label>Frecuencia Respiratoria (/min)</label><input type="number" class="form-control" data-field="frecuenciaRespiratoria" placeholder="16"></div>
+                        <div class="form-group col-md-4"><label>Peso (Kg)</label><input type="number" step="0.1" class="form-control" data-field="peso" placeholder="70"></div>
+                        <div class="form-group col-md-4"><label>Talla (cm)</label><input type="number" step="0.1" class="form-control" data-field="talla" placeholder="170"></div>
+                        <div class="form-group col-md-4"><label>IMC (Kg/m²)</label><input type="number" class="form-control bg-light font-weight-bold text-info" id="examCvImc" data-field="imc" readonly tabindex="-1" placeholder="0.00"></div>
+                        <div class="form-group col-md-4"><label>Perímetro Cefálico (cm)</label><input type="number" step="0.1" class="form-control" data-field="perimetroCefalico" placeholder="55"></div>
+                        <div class="form-group col-md-4"><label>Pulsioximetría (%)</label><input type="number" class="form-control" data-field="pulsioximetria" placeholder="98"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="pane-examen-fisico">
+                  <div class="d-flex align-items-center justify-content-between flex-wrap mb-3 ">
+                    <h5 class="mb-0 ">EM-02 EXAMEN FÍSICO REGIONAL</h5>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btnLimpiarExamenFisico"><i class="fas fa-broom mr-1"></i>Limpiar selección</button>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="card card-outline card-secondary h-100">
+                        <div class="card-header"><h3 class="card-title">Regional</h3></div>
+                        <div class="card-body p-2"><div id="examAccordion"></div></div>
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="card card-outline card-secondary h-100">
+                        <div class="card-header"><h3 class="card-title">Cuerpo Humano</h3></div>
+                        <div class="card-body">
+                          <ul class="nav nav-pills nav-sm justify-content-center mb-2" id="examViewTabs" role="tablist"></ul>
+                          <div class="em-body-stage">
+                            <div id="examViewportFront" class="em-body-view" data-view="front"></div>
+                            <div id="examViewportBack" class="em-body-view" data-view="back" hidden></div>
+                            <div id="examViewportLeft" class="em-body-view" data-view="left" hidden></div>
+                            <div id="examViewportRight" class="em-body-view" data-view="right" hidden></div>
+                          </div>
+                          <div class="text-center mt-2">
+                            <span class="badge badge-light border mr-2"><i class="fas fa-circle em-dot-normal mr-1"></i>Normal</span>
+                            <span class="badge badge-warning mr-2">Observación</span>
+                            <span class="badge badge-danger">Patología</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card card-outline card-secondary h-100">
+                        <div class="card-header"><h3 class="card-title">Observaciones</h3></div>
+                        <div class="card-body p-2">
+                          <div id="examObservaciones"><p class="text-muted small mb-0">Selecciona una región del cuerpo o de la lista regional para registrar una observación.</p></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card card-info card-outline mt-4">
+                    <div class="card-header bg-light"><h5 class="mb-0">EM-03 ANÁLISIS</h5></div>
+                    <div class="card-body"><textarea class="form-control" id="exam_analisis" rows="4" placeholder="Ingrese el análisis médico..."></textarea></div>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="pane-diagnostico-tratamiento">
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header bg-light d-flex align-items-center justify-content-between">
+                      <h5 class="mb-0">EM-04 DIAGNÓSTICO</h5>
+                      <button type="button" class="btn btn-info btn-sm" id="btnAddDiagnosticoExam"><i class="fas fa-plus mr-1"></i>Agregar diagnóstico</button>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                          <thead class="thead-light"><tr><th style="width:15%">CIE</th><th>Descripción</th><th class="text-center" style="width:8%">PRE</th><th class="text-center" style="width:8%">DEF</th><th style="width:5%"></th></tr></thead>
+                          <tbody id="examDxTableBody"></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card card-info card-outline mb-4">
+                    <div class="card-header bg-light"><h5 class="mb-0">EM-05 PLAN DE TRATAMIENTO</h5></div>
+                    <div class="card-body"><textarea class="form-control" id="exam_planTratamiento" rows="6" placeholder="Ingrese el plan de tratamiento..."></textarea></div>
+                  </div>
+                  <div class="card-footer bg-white text-right">
+                    <button type="button" class="btn btn-secondary mr-2" id="btnLimpiarExamenMedico">Cancelar</button>
+                    <button type="button" class="btn btn-info" id="btnGuardarAnamnesisExamenFisico"><i class="fas fa-save mr-1"></i>Guardar Examen Físico</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</div>
+
+<div id="examTooltip" class="em-tooltip" hidden></div>
+
+<div th:replace="~{fragments/layout :: toast-container}"></div>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+
+</body>
+</html>

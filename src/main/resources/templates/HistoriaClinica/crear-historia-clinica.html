@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:with="activePage='crearHistoriaClinica'">
+<head>
+  <th:block th:replace="~{fragments/layout :: head}"></th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+  <nav th:replace="~{fragments/layout :: header}"></nav>
+  <aside th:replace="~{fragments/layout :: sidebar}" th:with="activePage='crearHistoriaClinica'"></aside>
+
+  <div class="content-wrapper">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Abrir Historia Clínica</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+              <li class="breadcrumb-item"><a th:href="@{/historia-clinica}">Historia Clínica</a></li>
+              <li class="breadcrumb-item active">Abrir</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card card-info card-outline">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i class="fas fa-file-medical mr-1"></i>
+              Apertura de historia clínica
+            </h3>
+          </div>
+
+          <form id="formHcCrear" autocomplete="off">
+            <div class="card-body">
+              <div class="form-group px-4 mb-2">
+                <label for="hcCrearCedula">Cédula del paciente</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                  <input type="text"
+                         class="form-control"
+                         id="hcCrearCedula"
+                         placeholder="Ej. 0912345678"
+                         maxlength="10"
+                         required>
+                </div>
+                <small class="form-text text-muted">
+                  Ingrese la cédula del paciente para abrir su historia clínica.
+                </small>
+              </div>
+
+              <div id="hcCrearPacienteInfo" class="mb-3"></div>
+            </div>
+
+            <div class="card-footer text-right">
+              <button type="submit" class="btn btn-info">
+                <i class="fas fa-file-medical mr-1"></i>
+                Crear Historia Clínica
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<div th:replace="~{fragments/layout :: toast-container}"></div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

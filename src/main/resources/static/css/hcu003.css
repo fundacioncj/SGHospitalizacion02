@@ -1,0 +1,861 @@
+/* ============================================================================
+   CSS HCU-form.003 — HOSPITALIZACIÓN · ANAMNESIS
+   VERSIÓN AMPLIADA — HTML + IMPRESIÓN / PDF
+   ============================================================================ */
+
+/* ── Fuente y base ──────────────────────────────────────────── */
+html,
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    line-height: 1.3;
+    color: #000;
+    margin: 12px 16px;
+    padding: 0;
+    background: #f5f5f5;
+}
+
+/* ── Wrapper principal ─────────────────────────────────────── */
+form#frmAnamnesis {
+    background: #fff;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+/* ── Tablas ─────────────────────────────────────────────────── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 0;
+}
+
+td {
+    border: 1px solid #000;
+    padding: 5px 6px;
+    vertical-align: top;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+tr #number {
+    text-align: center;
+}
+
+/* ── Utilidades ─────────────────────────────────────────────── */
+.v-mid {
+    vertical-align: middle !important;
+}
+
+.center {
+    text-align: center !important;
+}
+
+.right {
+    text-align: right !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+/* ── Cabecera del formulario ────────────────────────────────── */
+table.tbl-hdr {
+    margin-bottom: 6px;
+}
+
+.logo-cell {
+    width: 10%;
+    font-weight: bold;
+    font-size: 20pt;
+    border: 2px solid #000;
+    padding: 8px !important;
+    vertical-align: middle !important;
+}
+
+.title-top {
+    font-weight: bold;
+    font-size: 12pt;
+    border: 2px solid #000;
+    border-bottom: 1px solid #000;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 6px !important;
+}
+
+.title-sub {
+    font-size: 10pt;
+    border: 2px solid #000;
+    border-top: 1px solid #000;
+    text-align: center;
+    vertical-align: middle;
+    padding: 6px !important;
+}
+
+.form-code {
+    width: 17%;
+    font-size: 9pt;
+    font-weight: bold;
+    border: 2px solid #000;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 5px !important;
+}
+
+/* ── Encabezado de sección ──────────────────────────────────── */
+.sec-hdr {
+    background-color: #a8a8ed !important;
+    color: #000 !important;
+    font-weight: bold;
+    font-size: 11pt !important;
+    text-transform: uppercase;
+    padding: 7px 8px !important;
+    vertical-align: middle !important;
+    border: 1px solid #000;
+    min-height: 25px;
+}
+
+.sec-hint {
+    font-weight: normal;
+    font-size: 8.5pt !important;
+    text-transform: none;
+    margin-left: 8px;
+}
+
+/* ── Encabezados de columna ─────────────────────────────────── */
+.col-hdr {
+    font-size: 9pt !important;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle !important;
+    padding: 6px 5px !important;
+    background-color: #CCFFCC !important;
+    color: #000 !important;
+    border: 1px solid #000;
+    line-height: 1.2;
+}
+
+/* ── Filas de datos ─────────────────────────────────────────── */
+.data-row td {
+    height: 28px;
+    min-height: 28px;
+    vertical-align: middle;
+    font-size: 11pt !important;
+    background-color: #fff !important;
+    padding: 5px 6px !important;
+}
+
+.data-row-lg td {
+    min-height: 42px;
+    height: 42px;
+    vertical-align: top;
+    font-size: 11pt !important;
+    padding: 6px !important;
+}
+
+/* ── Ítems de antecedentes ──────────────────────────────────── */
+.ant-item {
+    font-size: 9.5pt !important;
+    font-weight: bold;
+    border: 1px solid #000;
+    padding: 6px 7px !important;
+    text-align: left;
+    background-color: #CCFFCC !important;
+    vertical-align: middle;
+    line-height: 1.2;
+}
+
+.ant-check {
+    font-size: 12pt !important;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #000;
+    width: 28px;
+    padding: 4px 0 !important;
+    background-color: #fff !important;
+}
+
+.ant-check input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+/* ── Ítems de examen / órganos ──────────────────────────────── */
+.ef-num {
+    font-size: 9.5pt !important;
+    font-weight: bold;
+    border: 1px solid #000;
+    padding: 6px !important;
+    vertical-align: middle;
+    background-color: #CCFFCC !important;
+    text-align: center;
+    width: 25px;
+}
+
+.ef-name {
+    font-size: 9.5pt !important;
+    font-weight: bold;
+    border: 1px solid #000;
+    padding: 6px 7px !important;
+    vertical-align: middle;
+    background-color: #CCFFCC !important;
+}
+
+.ef-check {
+    font-size: 12pt !important;
+    text-align: center;
+    border: 1px solid #000;
+    width: 28px;
+    padding: 4px 0 !important;
+    vertical-align: middle;
+    background-color: #fff !important;
+}
+
+.ef-check input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+/* ── Número de ítem ─────────────────────────────────────────── */
+.num-col {
+    width: 28px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 9.5pt !important;
+    vertical-align: middle !important;
+}
+
+/* ── Fila etiqueta ──────────────────────────────────────────── */
+.lbl-row {
+    font-size: 9.5pt !important;
+    font-weight: bold;
+    background-color: #f0f0f0 !important;
+    padding: 6px 7px !important;
+    border: 1px solid #000;
+    vertical-align: middle !important;
+}
+
+/* ── Inputs ──────────────────────────────────────────────────── */
+.inp-full {
+    width: 98%;
+    min-height: 22px;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 11pt !important;
+    background: transparent;
+    padding: 2px 0;
+}
+
+.inp-full:focus {
+    background: #fffbe6;
+    outline: 1px solid #a8a8ed;
+    border-radius: 2px;
+}
+
+.inp-full[readonly] {
+    cursor: default;
+    color: #222;
+}
+
+/* ── Textarea principal ─────────────────────────────────────── */
+.ta-main {
+    width: 99%;
+    min-height: 95px;
+    resize: vertical;
+    font-size: 11pt !important;
+    font-family: inherit;
+    border: none;
+    outline: none;
+    background: transparent;
+    vertical-align: top;
+    padding: 5px;
+    line-height: 1.35;
+}
+
+.ta-main:focus {
+    background: #fffbe6;
+    outline: 1px solid #a8a8ed;
+}
+
+/* ── Grid de descripciones ─────────────────────────────────── */
+.desc-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 12px;
+    padding: 5px 3px;
+}
+
+.desc-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1 1 calc(33% - 12px);
+    min-width: 220px;
+}
+
+.desc-lbl {
+    font-size: 9.5pt !important;
+    font-weight: bold;
+    white-space: nowrap;
+    min-width: 95px;
+}
+
+.desc-item input {
+    min-height: 22px;
+    font-size: 10.5pt !important;
+}
+
+/* ── Check labels ───────────────────────────────────────────── */
+.chk-lbl {
+    margin-right: 8px;
+    font-size: 10pt !important;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.chk-lbl input {
+    margin-right: 4px;
+    width: 15px;
+    height: 15px;
+}
+
+/* ── Pie ────────────────────────────────────────────────────── */
+.form-footer td {
+    font-size: 8pt !important;
+    border: none;
+    padding: 4px 5px;
+    background: #e8e8e8 !important;
+}
+
+/* ── Botones ────────────────────────────────────────────────── */
+.actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 12px;
+    padding: 8px 3px;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 8px 22px;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1.5px solid #444;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 0.3px;
+}
+
+.btn-primary {
+    background-color: #a8a8ed;
+    color: #000;
+    border-color: #6060cc;
+}
+
+.btn-primary:hover {
+    background-color: #8080dd;
+}
+
+.btn-secondary {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background-color: #c8c8c8;
+}
+
+/* ── Alertas ────────────────────────────────────────────────── */
+.alert {
+    padding: 10px 16px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: 10pt;
+    font-weight: bold;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alert-ok {
+    background: #d4edda;
+    border: 1px solid #28a745;
+    color: #155724;
+}
+
+.alert-err {
+    background: #f8d7da;
+    border: 1px solid #dc3545;
+    color: #721c24;
+}
+
+/* ============================================================
+   CAJA SEXO / EDAD
+   ============================================================ */
+
+.sexo-edad-hdr {
+    padding: 0 !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 36px;
+}
+
+.sexo-edad-hdr div {
+    padding: 9px 7px !important;
+    text-align: center;
+    font-size: 9pt !important;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sexo-edad-hdr div + div {
+    border-left: 1px solid #000;
+}
+
+.sexo-edad-cell {
+    padding: 0 !important;
+    background-color: #fff !important;
+}
+
+.sexo-edad-cell > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    min-height: 38px;
+}
+
+.sexo-edad-cell span {
+    padding: 9px 7px !important;
+    text-align: center;
+    font-size: 11pt !important;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sexo-edad-cell span + span {
+    border-left: 1px solid #000;
+}
+
+/* ============================================================
+   PARTE B — MOTIVOS
+   ============================================================ */
+
+.motivo-num {
+    width: 10%;
+    text-align: center;
+    vertical-align: middle !important;
+    font-size: 10pt !important;
+    font-weight: bold;
+}
+
+.motivo-desc {
+    width: 40%;
+    font-size: 11pt !important;
+}
+
+/* ============================================================
+   PÁGINAS DE LA FICHA
+   ============================================================ */
+
+.pdf-page {
+    width: 96%;
+    margin: 0 auto;
+}
+
+.pagina-1,
+.pagina-2 {
+    width: 96%;
+    margin: 0 auto;
+    background: #fff;
+}
+
+/* ============================================================
+   PÁGINA 2
+   ============================================================ */
+
+.pagina-2 {
+    font-size: 11pt !important;
+}
+
+.pagina-2 td {
+    font-size: 11pt !important;
+    padding: 5px 6px !important;
+}
+
+.pagina-2 .col-hdr {
+    font-size: 9pt !important;
+    padding: 6px 5px !important;
+}
+
+.pagina-2 .sec-hdr {
+    font-size: 11pt !important;
+    padding: 7px 8px !important;
+}
+
+.pagina-2 .sec-hint {
+    font-size: 8.5pt !important;
+}
+
+.pagina-2 .data-row td {
+    font-size: 11pt !important;
+    min-height: 28px;
+}
+
+/* ── Regional ───────────────────────────────────────────────── */
+.pagina-2 td[data-region-mark] {
+    font-size: 11pt !important;
+    font-weight: bold;
+    background-color: #fff !important;
+}
+
+/* ── Texto generado H ───────────────────────────────────────── */
+.pagina-2 #vfExamenH {
+    font-size: 11pt !important;
+    background-color: #fff !important;
+    line-height: 1.35;
+}
+
+/* ── Análisis ───────────────────────────────────────────────── */
+.pagina-2 #vfExamenAnalisis {
+    font-size: 11pt !important;
+    background-color: #fff !important;
+    line-height: 1.35;
+}
+
+/* ── Diagnósticos ───────────────────────────────────────────── */
+.pagina-2 #vfExamenDiagnosticosTableBody td {
+    font-size: 10pt !important;
+    background-color: #fff !important;
+    padding: 6px !important;
+}
+
+/* ── Plan ───────────────────────────────────────────────────── */
+.pagina-2 #vfExamenPlanTratamiento {
+    font-size: 11pt !important;
+    background-color: #fff !important;
+    line-height: 1.35;
+}
+
+/* ── Profesional ────────────────────────────────────────────── */
+.pagina-2 #vfProfesionalFecha,
+.pagina-2 #vfProfesionalNombreMedico,
+.pagina-2 #vfProfesionalCedulaMedico {
+    font-size: 11pt !important;
+    background-color: #fff !important;
+}
+
+/* ============================================================
+   DATOS DEL PACIENTE — PÁGINA 2
+   ============================================================ */
+
+.pagina-2-datos-paciente {
+    width: 96%;
+    margin: 0 auto;
+}
+
+.pagina-2-datos-paciente td {
+    font-size: 11pt !important;
+    background-color: #fff !important;
+    padding: 5px 6px !important;
+}
+
+.pagina-2-datos-paciente .col-hdr {
+    font-size: 9pt !important;
+    background-color: #CCFFCC !important;
+    padding: 6px !important;
+}
+
+/* ============================================================
+   IMPRESIÓN / PDF
+   ============================================================ */
+
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 5mm;
+    }
+
+    html,
+    body {
+        width: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    body {
+        font-size: 11pt !important;
+        line-height: 1.3 !important;
+    }
+
+    form#frmAnamnesis {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        background: #fff !important;
+    }
+
+    .print-actions,
+    .actions,
+    button {
+        display: none !important;
+    }
+
+    /* ── Páginas ─────────────────────────────────────────────── */
+    .pagina-1,
+    .pagina-2,
+    .pdf-page {
+        width: 96% !important;
+        margin: 0 auto !important;
+        background: #fff !important;
+        zoom: 1 !important;
+        transform: none !important;
+    }
+
+    /* ── Tablas ──────────────────────────────────────────────── */
+    table {
+        width: 100% !important;
+    }
+
+    td {
+        padding: 5px 6px !important;
+    }
+
+    /* ── Cabecera ────────────────────────────────────────────── */
+    .logo-cell {
+        font-size: 20pt !important;
+        padding: 8px !important;
+    }
+
+    .title-top {
+        font-size: 12pt !important;
+        padding: 8px 6px !important;
+    }
+
+    .title-sub {
+        font-size: 10pt !important;
+        padding: 6px !important;
+    }
+
+    .form-code {
+        font-size: 9pt !important;
+        padding: 8px 5px !important;
+    }
+
+    /* ── Secciones ───────────────────────────────────────────── */
+    .sec-hdr {
+        font-size: 11pt !important;
+        padding: 7px 8px !important;
+        background-color: #a8a8ed !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .sec-hint {
+        font-size: 8.5pt !important;
+    }
+
+    /* ── Encabezados verdes ─────────────────────────────────── */
+    .col-hdr,
+    .ant-item,
+    .ef-num,
+    .ef-name {
+        background-color: #CCFFCC !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .col-hdr {
+        font-size: 9pt !important;
+        padding: 6px 5px !important;
+    }
+
+    .ant-item {
+        font-size: 9.5pt !important;
+        padding: 6px 7px !important;
+    }
+
+    .ef-num,
+    .ef-name {
+        font-size: 9.5pt !important;
+        padding: 6px !important;
+    }
+
+    /* ── Datos ───────────────────────────────────────────────── */
+    .data-row td,
+    .pagina-1 td,
+    .pagina-2 td,
+    .pagina-2-datos-paciente td {
+        font-size: 11pt !important;
+        background-color: #fff !important;
+    }
+
+    .data-row td {
+        height: 28px !important;
+        min-height: 28px !important;
+    }
+
+    .data-row-lg td {
+        height: 42px !important;
+        min-height: 42px !important;
+    }
+
+    /* ── Etiquetas ───────────────────────────────────────────── */
+    .lbl-row {
+        font-size: 9.5pt !important;
+        padding: 6px 7px !important;
+        background-color: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* ── Inputs ──────────────────────────────────────────────── */
+    .inp-full {
+        font-size: 11pt !important;
+        min-height: 22px !important;
+    }
+
+    .ta-main {
+        font-size: 11pt !important;
+        min-height: 95px !important;
+    }
+
+    /* ── Sexo / Edad ─────────────────────────────────────────── */
+    .sexo-edad-hdr {
+        min-height: 36px !important;
+    }
+
+    .sexo-edad-hdr div {
+        font-size: 9pt !important;
+        padding: 9px 7px !important;
+    }
+
+    .sexo-edad-cell > div {
+        min-height: 38px !important;
+    }
+
+    .sexo-edad-cell span {
+        font-size: 11pt !important;
+        padding: 9px 7px !important;
+    }
+
+    /* ── Página 2 ────────────────────────────────────────────── */
+    .pagina-2 .col-hdr {
+        font-size: 9pt !important;
+    }
+
+    .pagina-2 .sec-hdr {
+        font-size: 11pt !important;
+    }
+
+    .pagina-2 .sec-hint {
+        font-size: 8.5pt !important;
+    }
+
+    .pagina-2 #vfExamenH,
+    .pagina-2 #vfExamenAnalisis,
+    .pagina-2 #vfExamenPlanTratamiento {
+        font-size: 11pt !important;
+        background-color: #fff !important;
+    }
+
+    .pagina-2 #vfExamenDiagnosticosTableBody td {
+        font-size: 10pt !important;
+        background-color: #fff !important;
+    }
+
+    .pagina-2 #vfProfesionalFecha,
+    .pagina-2 #vfProfesionalNombreMedico,
+    .pagina-2 #vfProfesionalCedulaMedico {
+        font-size: 11pt !important;
+        background-color: #fff !important;
+    }
+
+    .pagina-2-datos-paciente .col-hdr {
+        font-size: 9pt !important;
+        background-color: #CCFFCC !important;
+    }
+
+    /* ── Colores de impresión ───────────────────────────────── */
+    .sec-hdr {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .col-hdr,
+    .ant-item,
+    .ef-num,
+    .ef-name {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* ── Evitar cortes incómodos ─────────────────────────────── */
+    tr,
+    td {
+        page-break-inside: avoid;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+    html,
+    body {
+        margin: 6px;
+        font-size: 9pt;
+    }
+
+    form#frmAnamnesis {
+        padding: 5px;
+    }
+
+    .desc-item {
+        flex: 1 1 100%;
+    }
+
+    .actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn {
+        text-align: center;
+    }
+
+    .pagina-1,
+    .pagina-2,
+    .pdf-page {
+        width: 100%;
+    }
+}
+
+.espacio {
+    margin-top: 20px !important;
+}
+
+
+
+/*CAMBIO AQUIIII*/

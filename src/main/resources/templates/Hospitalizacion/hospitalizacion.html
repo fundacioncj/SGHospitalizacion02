@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <nav th:replace="~{fragments/layout :: header}"></nav>
+  <aside th:replace="~{fragments/layout :: sidebar}" th:with="activePage='hospitalizacion'"></aside>
+
+  <div class="content-wrapper">
+
+    <!-- Encabezado de página (patrón AdminLTE: content-header + breadcrumb) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1><i class="fas fa-procedures mr-2"></i>Hospitalización</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="hospitalizacion.html">Inicio</a></li>
+              <li class="breadcrumb-item active">Hospitalización</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+
+        <!-- Buscador por cédula (card estándar AdminLTE) -->
+        <div class="card card-outline card-info">
+          <div class="card-body">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text input-custom-text"><i class="fas fa-id-card"></i></span>
+              </div>
+              <input type="text" id="hospCedulaInput" class="form-control input-custom-field"
+                      placeholder="Ingresa el número de cédula del paciente..." maxlength="10" inputmode="numeric" />
+              <div class="input-group-append">
+                <button id="hospBuscarBtn" type="button" class="btn btn-info btn-custom-search">
+                  <i class="fas fa-search mr-1"></i>Buscar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resultados: app.js reemplaza este contenedor con la tabla,
+            el spinner o el estado vacío -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-list mr-2"></i>Registros de hospitalización</h3>
+          </div>
+          <div class="card-body p-0">
+            <div id="hospResultados">
+              <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h4>Busca un paciente</h4>
+                <p>Ingresa una cédula y presiona "Buscar" para ver sus hospitalizaciones.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL VER (solo lectura) — reutiliza modal-custom-* -->
+<!-- ============================================================ -->
+<div class="modal fade" id="modalHospVer" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-custom-width modal-dialog-centered">
+    <div class="modal-content modal-custom-content">
+      <div class="modal-header modal-custom-header bg-info">
+        <div>
+          <h5 class="modal-title modal-custom-title text-white mb-0">
+            <i class="fas fa-procedures mr-2"></i>Detalle de hospitalización
+          </h5>
+          <small id="hospVerSubtitle" class="text-white-50"></small>
+        </div>
+        <button type="button" class="close modal-custom-close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-custom-body">
+        <div id="hospVerContenido" class="detail-grid"></div>
+      </div>
+      <div class="modal-footer modal-custom-footer">
+        <button type="button" class="btn btn-secondary btn-custom-action" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL EDITAR -->
+<!-- ============================================================ -->
+<div class="modal fade" id="modalHospEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-custom-width modal-dialog-centered">
+    <form id="formHospEditar" class="modal-content modal-custom-content">
+      <div class="modal-header modal-custom-header bg-info">
+        <div> <!-- card-header bg-info text-white-->
+          <h5 class="modal-title modal-custom-title bg-info text-white mb-0">
+            <i class="fas fa-pen mr-2"></i>Editar hospitalización
+          </h5>
+          <small id="hospEditarSubtitle" class="text-white-25"></small>
+        </div>
+        <button type="button" class="close modal-custom-close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-custom-body">
+        <input type="hidden" id="hospEditId" />
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label class="form-label-sm" for="hospEditEstado">Estado</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-clipboard-check"></i>
+                </span>
+              </div>
+              <select id="hospEditEstado" class="form-control">
+                <option value="ACTIVO">Activo</option>
+                <option value="Alta">Alta</option>
+                <option value="TRASLADADO">Trasladado</option>
+                <option value="FALLECIDO">Fallecido</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label class="form-label-sm" for="hospEditFechaEgreso">Fecha de egreso</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-calendar-check"></i></span>
+              </div>
+              <input type="date" id="hospEditFechaEgreso" class="form-control" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label-sm" for="hospEditSala">Sala / habitación</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-bed"></i></span>
+            </div>
+            <input type="text" id="hospEditSala" class="form-control" placeholder="Ej. Sala 3 - Cama 12" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label-sm" for="hospEditDiagnostico">Diagnóstico principal</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
+            </div>
+            <input type="text" id="hospEditDiagnostico" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group mb-0">
+          <label class="form-label-sm" for="hospEditObservaciones">Observaciones</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-sticky-note"></i></span>
+            </div>
+            <textarea id="hospEditObservaciones" class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer modal-custom-footer">
+        <button type="button" class="btn btn-secondary btn-custom-action" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-info btn-custom-action">
+          <i class="fas fa-save mr-1"></i>Guardar cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div th:replace="~{fragments/layout :: modal-confirmar-eliminar}"></div>
+<div th:replace="~{fragments/layout :: toast-container}"></div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

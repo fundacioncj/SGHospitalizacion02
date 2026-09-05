@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<!--
+  Mismo supuesto de layout que crear-hospitalizacion.html y
+  crear-historia-clinica.html (fragments/layout, header, sidebar,
+  footer, scripts). Ajusta las líneas "AJUSTE" si tus fragments
+  tienen otro nombre.
+
+  Bootstrap 4 (no 5): las pestañas y el acordeón de esta página usan
+  data-toggle, no data-bs-toggle.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:with="activePage='crearAnamnesis'">
+<head>
+  <!-- AJUSTE: nombre real de tu fragmento de <head> -->
+  <th:block th:replace="~{fragments/layout :: head}"></th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- AJUSTE: nombre real de tu fragmento de header -->
+  <nav th:replace="~{fragments/layout :: header}"></nav>
+  <!-- AJUSTE: nombre real de tu fragmento de sidebar -->
+  <aside th:replace="~{fragments/layout :: sidebar}" th:with="activePage='crearAnamnesis'"></aside>
+
+  <div class="content-wrapper">
+
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Crear Anamnesis</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+              <li class="breadcrumb-item"><a th:href="@{/anamnesis}">Anamnesis</a></li>
+              <li class="breadcrumb-item active">Crear</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card card-info card-outline">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title"><i class="fas fa-notes-medical mr-1"></i> Crear Anamnesis</h3>
+            <button type="button" class="btn btn-info" id="btnNuevaAnamnesis">
+              <i class="bi bi-plus-lg"></i> Nuevo Registro
+            </button>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-0">
+              Usa el botón "Nuevo Registro" para abrir el formulario de anamnesis, dividido en
+              pestañas AN-01 a AN-07 según las secciones clínicas del documento.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<!-- ============================================================
+    MODAL DE CREACIÓN — declarado directamente en el HTML (no se
+    genera dinámicamente). Misma estructura que el resto del
+    proyecto: modal > modal-dialog > modal-content > modal-header /
+    modal-body / modal-footer.
+    ============================================================ -->
+<div class="modal fade" id="modalCrearAnamnesis" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-anamnesis" role="document">
+    <div class="modal-content">
+      <form id="formAnCrear" autocomplete="off">
+        <div class="modal-header bg-info">
+          <h5 class="modal-title">Nueva Anamnesis</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <ul class="nav nav-tabs justify-content-center" id="anCrearTabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="tab-an01" data-toggle="tab" href="#pane-an01" role="tab">AN-01 Datos Generales</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-an02" data-toggle="tab" href="#pane-an02" role="tab">AN-02 Motivo de Consulta</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-an03" data-toggle="tab" href="#pane-an03" role="tab">AN-03 Antecedentes Personales</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-an04" data-toggle="tab" href="#pane-an04" role="tab">AN-04 Gineco-obstétricos / Andrológicos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-an05" data-toggle="tab" href="#pane-an05" role="tab">AN-05 Antecedentes Familiares</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-an06" data-toggle="tab" href="#pane-an06" role="tab">AN-06 Enfermedad Actual</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-an07" data-toggle="tab" href="#pane-an07" role="tab">AN-07 Revisión por Sistemas</a>
+            </li>
+          </ul>
+
+          <div class="tab-content border border-top-0 p-3" id="anCrearTabsContent">
+
+            <!-- AN-01 Datos Generales (referencias) -->
+            <div class="tab-pane fade show active" id="pane-an01" role="tabpanel">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="anCrear_fechaRegistro">Fecha de registro</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    </div>
+                    <input type="date" class="form-control" id="anCrear_fechaRegistro" required>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label for="anCrear_cedulaPaciente">Cédula del paciente</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="anCrear_cedulaPaciente" placeholder="Ingrese la cédula" required>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label for="anCrear_cedulaMedico">Médico responsable</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-user-md"></i></span>
+                    </div>
+                    <select class="form-control" id="anCrear_cedulaMedico" required>
+                      <option value="">Seleccionar médico...</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- AN-02 Motivo de Consulta -->
+            <div class="tab-pane fade" id="pane-an02" role="tabpanel">
+              <label>Motivo de consulta</label>
+              <textarea class="form-control"
+                        id="anCrear_motivoConsulta"
+                        rows="2"
+                        placeholder="Describa el motivo principal de consulta..."></textarea>
+            </div>
+
+            <!-- AN-03 Antecedentes Personales -->
+            <div class="tab-pane fade" id="pane-an03" role="tabpanel">
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_alergiaMedicamentos" data-target="anCrear_descripcionAlergias">
+                  <label class="form-check-label" for="anCrear_alergiaMedicamentos">Alergia a medicamentos</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionAlergias" rows="2" disabled placeholder="Detalle de la(s) alergia(s)..."></textarea>
+              </div>
+
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="anCrear_otrasAlergias">
+                <label class="form-check-label" for="anCrear_otrasAlergias">Otras alergias (no medicamentosas)</label>
+                <small class="form-text text-muted">Se detalla también en el campo "Alergia a medicamentos" de arriba.</small>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_vacunas" data-target="anCrear_descripcionVacunas">
+                  <label class="form-check-label" for="anCrear_vacunas">Esquema de vacunación</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionVacunas" rows="2" disabled placeholder="Vacunas relevantes..."></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_patologiasClinicas" data-target="anCrear_descripcionPatologiasClinicas">
+                  <label class="form-check-label" for="anCrear_patologiasClinicas">Patologías clínicas</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionPatologiasClinicas" rows="2" disabled placeholder="Patologías conocidas..."></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_medicacionHabitual" data-target="anCrear_descripcionMedicacionHabitual">
+                  <label class="form-check-label" for="anCrear_medicacionHabitual">Medicación habitual</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionMedicacionHabitual" rows="2" disabled placeholder="Medicamentos y dosis..."></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_antecedentesQuirurgicos" data-target="anCrear_descripcionAntecedentesQuirurgicos">
+                  <label class="form-check-label" for="anCrear_antecedentesQuirurgicos">Antecedentes quirúrgicos</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionAntecedentesQuirurgicos" rows="2" disabled placeholder="Cirugías previas..."></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_habitos" data-target="anCrear_descripcionHabitos">
+                  <label class="form-check-label" for="anCrear_habitos">Hábitos (tabaco, alcohol, etc.)</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionHabitos" rows="2" disabled placeholder="Detalle de hábitos..."></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_condicionSocioeconomica" data-target="anCrear_descripcionCondicionSocioeconomica">
+                  <label class="form-check-label" for="anCrear_condicionSocioeconomica">Condición socioeconómica relevante</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionCondicionSocioeconomica" rows="2" disabled placeholder="Detalle relevante..."></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_discapacidad" data-target="anCrear_descripcionDiscapacidad">
+                  <label class="form-check-label" for="anCrear_discapacidad">Discapacidad</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionDiscapacidad" rows="2" disabled placeholder="Tipo y grado..."></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_religion" data-target="anCrear_descripcionReligion">
+                  <label class="form-check-label" for="anCrear_religion">Religión (relevante para el manejo clínico)</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionReligion" rows="2" disabled placeholder="Ej. restricciones a transfusiones..."></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_tipificacionSanguinea" data-target="anCrear_descripcionTipificacionSanguinea">
+                  <label class="form-check-label" for="anCrear_tipificacionSanguinea">Conoce su tipificación sanguínea</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionTipificacionSanguinea" rows="2" disabled placeholder="Ej. O+"></textarea>
+              </div>
+
+            </div>
+
+            <!-- AN-04 Gineco-obstétricos / Andrológicos -->
+            <div class="tab-pane fade" id="pane-an04" role="tabpanel">
+
+              <div class="form-group">
+                <label>Sexo</label>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" class="custom-control-input" id="anCrear_sexoMujer" name="anCrear_sexo" value="MUJER">
+                  <label class="custom-control-label" for="anCrear_sexoMujer">Mujer</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" class="custom-control-input" id="anCrear_sexoHombre" name="anCrear_sexo" value="HOMBRE">
+                  <label class="custom-control-label" for="anCrear_sexoHombre">Hombre</label>
+                </div>
+              </div>
+
+              <div id="anCrear_ginecologico" style="display:none;">
+
+                <h6 class="font-weight-bold border-bottom pb-2">Datos ginecológicos</h6>
+
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <label>Edad de menarquia</label>
+                    <input type="number" class="form-control" id="anCrear_edadMenarquia">
+                  </div>
+
+                  <div class="form-group col-md-3">
+                    <label>Edad de menopausia</label>
+                    <input type="number" class="form-control" id="anCrear_edadMenopausia">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Ciclos</label>
+                    <input type="text" class="form-control" id="anCrear_ciclos" placeholder="Ej. regular 28/5">
+                  </div>
+
+                  <div class="form-group col-md-3">
+                    <label>Edad inicio vida sexual</label>
+                    <input type="number" class="form-control" id="anCrear_edadInicioVidaSexual">
+                  </div>
+
+                  <div class="form-group col-md-2">
+                    <label>Gestas</label>
+                    <input type="number" class="form-control" id="anCrear_numeroGestas">
+                  </div>
+
+                  <div class="form-group col-md-2">
+                    <label>Partos</label>
+                    <input type="number" class="form-control" id="anCrear_numeroPartos">
+                  </div>
+
+                  <div class="form-group col-md-2">
+                    <label>Abortos</label>
+                    <input type="number" class="form-control" id="anCrear_numeroAbortos">
+                  </div>
+
+                  <div class="form-group col-md-2">
+                    <label>Cesáreas</label>
+                    <input type="number" class="form-control" id="anCrear_numeroCesareas">
+                  </div>
+
+                  <div class="form-group col-md-3">
+                    <label>Hijos vivos</label>
+                    <input type="number" class="form-control" id="anCrear_numeroHijosVivos">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Última menstruación</label>
+                    <input type="date" class="form-control" id="anCrear_fechaUltimaMenstruacion">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Último parto</label>
+                    <input type="date" class="form-control" id="anCrear_fechaUltimoParto">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Última citología cervical</label>
+                    <input type="date" class="form-control" id="anCrear_fechaUltimaCitologiaCervical">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Última colposcopia</label>
+                    <input type="date" class="form-control" id="anCrear_fechaUltimaColposcopia">
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Última mamografía</label>
+                    <input type="date" class="form-control" id="anCrear_fechaUltimaMamografia">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Método de planificación familiar</label>
+                    <input type="text" class="form-control" id="anCrear_metodoPlanificacionFamiliar">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Terapia hormonal</label>
+                    <input type="text" class="form-control" id="anCrear_terapiaHormonal">
+                  </div>
+
+                </div>
+              </div>
+
+              <div id="anCrear_andrologico" style="display:none;">
+
+                <h6 class="font-weight-bold border-bottom pb-2">Datos andrológicos</h6>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Último antígeno prostático</label>
+                    <input type="date" class="form-control" id="anCrear_fechaUltimoAntigenoProstatico">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label>Último eco prostático</label>
+                    <input type="date" class="form-control" id="anCrear_fechaUltimoEcoProstatico">
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            --
+            <!-- AN-05 Antecedentes Familiares -->
+            <div class="tab-pane fade" id="pane-an05" role="tabpanel">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarCardiopatia">
+                    <label class="form-check-label" for="anCrear_familiarCardiopatia">Cardiopatía</label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarHipertension">
+                    <label class="form-check-label" for="anCrear_familiarHipertension">Hipertensión</label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarEnfermedadCerebroVascular">
+                    <label class="form-check-label" for="anCrear_familiarEnfermedadCerebroVascular">Enfermedad cerebrovascular</label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarEndocrinoMetabolico">
+                    <label class="form-check-label" for="anCrear_familiarEndocrinoMetabolico">Endocrino-metabólico</label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarCancer">
+                    <label class="form-check-label" for="anCrear_familiarCancer">Cáncer</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarTuberculosis">
+                    <label class="form-check-label" for="anCrear_familiarTuberculosis">Tuberculosis</label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarEnfermedadMental">
+                    <label class="form-check-label" for="anCrear_familiarEnfermedadMental">Enfermedad mental</label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarEnfermedadInfecciosa">
+                    <label class="form-check-label" for="anCrear_familiarEnfermedadInfecciosa">Enfermedad infecciosa</label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="anCrear_familiarMalformacion">
+                    <label class="form-check-label" for="anCrear_familiarMalformacion">Malformación</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="toggle-field mt-2">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_familiarOtro" data-target="anCrear_familiarOtroDescripcion">
+                  <label class="form-check-label" for="anCrear_familiarOtro">Otro</label>
+                </div>
+                <textarea class="form-control" id="anCrear_familiarOtroDescripcion" rows="2" disabled placeholder="Describe el antecedente familiar..."></textarea>
+              </div>
+            </div>
+
+            <!-- AN-06 Enfermedad Actual -->
+            <div class="tab-pane fade" id="pane-an06" role="tabpanel">
+              <div class="form-group">
+                <label for="anCrear_enfermedadActual">Enfermedad actual</label>
+                <textarea class="form-control" id="anCrear_enfermedadActual" rows="6"
+                          placeholder="Describe cronológicamente la enfermedad actual..."></textarea>
+              </div>
+            </div>
+
+            <!-- AN-07 Revisión por Sistemas -->
+            <div class="tab-pane fade" id="pane-an07" role="tabpanel">
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaPielAnexos" data-target="anCrear_descripcionPielAnexos">
+                  <label class="form-check-label" for="anCrear_sistemaPielAnexos">Piel y anexos</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionPielAnexos" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaOrganosDeLosSentidos" data-target="anCrear_descripcionOrganosDeLosSentidos">
+                  <label class="form-check-label" for="anCrear_sistemaOrganosDeLosSentidos">Órganos de los sentidos</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionOrganosDeLosSentidos" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaRespiratorio" data-target="anCrear_descripcionRespiratorio">
+                  <label class="form-check-label" for="anCrear_sistemaRespiratorio">Respiratorio</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionRespiratorio" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaCardiovascular" data-target="anCrear_descripcionCardiovascular">
+                  <label class="form-check-label" for="anCrear_sistemaCardiovascular">Cardiovascular</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionCardiovascular" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaDigestivo" data-target="anCrear_descripcionDigestivo">
+                  <label class="form-check-label" for="anCrear_sistemaDigestivo">Digestivo</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionDigestivo" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaGenitoUrinario" data-target="anCrear_descripcionGenitoUrinario">
+                  <label class="form-check-label" for="anCrear_sistemaGenitoUrinario">Genitourinario</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionGenitoUrinario" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaMusculoEsqueletico" data-target="anCrear_descripcionMusculoEsqueletico">
+                  <label class="form-check-label" for="anCrear_sistemaMusculoEsqueletico">Musculoesquelético</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionMusculoEsqueletico" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaEndocrino" data-target="anCrear_descripcionEndocrino">
+                  <label class="form-check-label" for="anCrear_sistemaEndocrino">Endocrino</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionEndocrino" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaHemoLinfatico" data-target="anCrear_descripcionHemoLinfatico">
+                  <label class="form-check-label" for="anCrear_sistemaHemoLinfatico">Hemolinfático</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionHemoLinfatico" rows="2" disabled></textarea>
+              </div>
+
+              <div class="toggle-field">
+                <div class="form-check">
+                  <input class="form-check-input toggle-check" type="checkbox" id="anCrear_sistemaNervioso" data-target="anCrear_descripcionNervioso">
+                  <label class="form-check-label" for="anCrear_sistemaNervioso">Nervioso</label>
+                </div>
+                <textarea class="form-control" id="anCrear_descripcionNervioso" rows="2" disabled></textarea>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-info">
+            <i class="bi bi-check-circle"></i> Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Contenedor de toasts reutilizado por mostrarToast() en app.js.
+    Si tu fragmento de layout ya lo incluye globalmente, borra este div
+    para no duplicarlo. -->
+<div th:replace="~{fragments/layout :: toast-container}"></div>
+
+<!-- AJUSTE: nombre real de tu fragmento de scripts (jQuery, Bootstrap, AdminLTE) -->
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGHospitalizacion · Sistema de Gestión Hospitalaria</title>
+
+<!-- Google Font -->
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+
+<!-- Bootstrap / AdminLTE -->
+<link rel="stylesheet" th:href="@{/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}">
+
+<!-- Tus estilos -->
+<link rel="stylesheet" th:href="@{/css/estilos-modal.css}">
+<link rel="stylesheet" th:href="@{/css/estilos-formulario.css}">
+<link rel="stylesheet" th:href="@{/css/sidebar.css}">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/css/sgh-clinical.css}">
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<header class="hsp-navbar">
+  <div class="container-fluid px-3 px-lg-4">
+    <div class="d-flex align-items-center justify-content-between py-2 flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 21s-7-4.35-9.5-8.5C.5 8.5 2.5 5 6 5c2 0 3.3 1 4 2 0 0 .8 1 2 1s2-1 2-1c.7-1 2-2 4-2 3.5 0 5.5 3.5 3.5 7.5C19 16.65 12 21 12 21Z"/>
+            <path d="M8 12h2l1.2-2.4L12.8 14.4 14 12h2"/>
+          </svg>
+        </div>
+        <div>
+          <p class="brand-title mb-0">Sistema de Gestión Hospitalaria</p>
+          <span class="brand-subtitle">HOSPITALIZACIÓN · HISTORIA CLÍNICA · ANAMNESIS</span><br>
+          <span class="brand-university">Universidad de Guayaquil — Facultad de Ingeniería Industrial</span>
+        </div>
+      </div>
+      <div class="vital-strip">
+        <span class="dot"></span>
+        <span id="navClockReadout">SISTEMA EN LÍNEA</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO + MÓDULOS
+     ============================================================ -->
+<section class="hsp-hero">
+  <div class="container px-3 px-lg-4">
+    <span class="eyebrow">Panel clínico</span>
+    <h1>Selecciona un módulo para comenzar</h1>
+    <p class="lead">Busca pacientes por número de cédula dentro de cada módulo. Los datos se consultan en tiempo real contra los servicios REST de SGHospitalizacion.</p>
+  </div>
+</section>
+
+<main class="container px-3 px-lg-4 py-4">
+
+  <!-- Tarjetas de módulo -->
+  <div class="row g-3 mb-4" id="moduleCards">
+    <div class="col-md-4">
+      <div class="module-card" data-module="hospitalizacion" tabindex="0" role="button" aria-pressed="false">
+        <div class="card-body">
+          <div class="module-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg>
+          </div>
+          <span class="module-code">MÓD-01</span>
+          <h3>Hospitalización</h3>
+          <p>Ingresos, egresos, sala y estado clínico del paciente.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="module-card" data-module="historiaClinica" tabindex="0" role="button" aria-pressed="false">
+        <div class="card-body">
+          <div class="module-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/><path d="M9 13h6M9 17h4"/></svg>
+          </div>
+          <span class="module-code">MÓD-02</span>
+          <h3>Historia Clínica</h3>
+          <p>Alergias, antecedentes, medicamentos y observaciones.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="module-card" data-module="anamnesis" tabindex="0" role="button" aria-pressed="false">
+        <div class="card-body">
+          <div class="module-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <span class="module-code">MÓD-03</span>
+          <h3>Anamnesis</h3>
+          <p>Evaluación clínica completa, organizada por secciones.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PANEL: HOSPITALIZACIÓN
+       ============================================================ -->
+  <section class="module-panel" id="panel-hospitalizacion" aria-labelledby="hospTituloPanel">
+    <div class="panel-header">
+      <h2 id="hospTituloPanel"><i class="bi bi-hospital me-2"></i>Hospitalización</h2>
+      <div class="search-bar">
+        <input type="text" class="form-control" id="hospCedulaInput" placeholder="Buscar por cédula del paciente" maxlength="10" inputmode="numeric">
+        <button class="btn btn-clinical" id="hospBuscarBtn" type="button">
+          <i class="bi bi-search me-1"></i>Buscar
+        </button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div id="hospResultados">
+        <div class="placeholder-state">
+          <i class="bi bi-clipboard2-pulse"></i>
+          <h4>Aún no hay una búsqueda</h4>
+          <p>Ingresa la cédula del paciente para consultar sus registros de hospitalización.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANEL: HISTORIA CLÍNICA
+       ============================================================ -->
+  <section class="module-panel" id="panel-historiaClinica" aria-labelledby="hcTituloPanel">
+    <div class="panel-header">
+      <h2 id="hcTituloPanel"><i class="bi bi-file-earmark-medical me-2"></i>Historia Clínica</h2>
+      <div class="search-bar">
+        <input type="text" class="form-control" id="hcCedulaInput" placeholder="Buscar por cédula del paciente" maxlength="10" inputmode="numeric">
+        <button class="btn btn-clinical" id="hcBuscarBtn" type="button">
+          <i class="bi bi-search me-1"></i>Buscar
+        </button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div id="hcResultados">
+        <div class="placeholder-state">
+          <i class="bi bi-journal-medical"></i>
+          <h4>Aún no hay una búsqueda</h4>
+          <p>Ingresa la cédula del paciente para consultar su historia clínica.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANEL: ANAMNESIS
+       ============================================================ -->
+  <section class="module-panel" id="panel-anamnesis" aria-labelledby="anTituloPanel">
+    <div class="panel-header">
+      <h2 id="anTituloPanel"><i class="bi bi-clipboard2-pulse-fill me-2"></i>Anamnesis</h2>
+      <div class="search-bar">
+        <input type="text" class="form-control" id="anCedulaInput" placeholder="Buscar por cédula del paciente" maxlength="10" inputmode="numeric">
+        <button class="btn btn-clinical" id="anBuscarBtn" type="button">
+          <i class="bi bi-search me-1"></i>Buscar
+        </button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div id="anResultados">
+        <div class="placeholder-state">
+          <i class="bi bi-clipboard2-pulse"></i>
+          <h4>Aún no hay una búsqueda</h4>
+          <p>Ingresa la cédula del paciente para consultar sus registros de anamnesis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="hsp-footer">
+  <div class="container px-3 px-lg-4 d-flex flex-wrap justify-content-between gap-2">
+    <span><span class="footer-brand">SGHospitalizacion</span> — Proyecto académico</span>
+    <span>Universidad de Guayaquil · Facultad de Ingeniería Industrial</span>
+  </div>
+</footer>
+
+<!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+<!-- ============================================================
+     MODAL: HOSPITALIZACIÓN — VER
+     ============================================================ -->
+<div class="modal fade" id="modalHospVer" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title"><i class="bi bi-eye me-2"></i>Detalle de hospitalización</h5>
+          <span class="modal-subtitle" id="hospVerSubtitle"></span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-grid" id="hospVerContenido"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-clinical" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: HOSPITALIZACIÓN — EDITAR
+     ============================================================ -->
+<div class="modal fade" id="modalHospEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar hospitalización</h5>
+          <span class="modal-subtitle" id="hospEditarSubtitle"></span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <form id="formHospEditar">
+        <div class="modal-body">
+          <input type="hidden" id="hospEditId">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label-sm" for="hospEditFechaEgreso">Fecha de egreso</label>
+              <input type="date" class="form-control" id="hospEditFechaEgreso">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm" for="hospEditEstado">Estado</label>
+              <select class="form-select" id="hospEditEstado">
+                <option value="ACTIVO">Activo</option>
+                <option value="Alta">Alta</option>
+                <option value="TRASLADADO">Trasladado</option>
+                <option value="FALLECIDO">Fallecido</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm" for="hospEditSala">Sala / Habitación</label>
+              <input type="text" class="form-control" id="hospEditSala" placeholder="Ej. Sala 3 - Cama 12">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm" for="hospEditDiagnostico">Diagnóstico principal</label>
+              <input type="text" class="form-control" id="hospEditDiagnostico">
+            </div>
+            <div class="col-12">
+              <label class="form-label-sm" for="hospEditObservaciones">Observaciones</label>
+              <textarea class="form-control" id="hospEditObservaciones" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-clinical" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-clinical"><i class="bi bi-save me-1"></i>Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: HISTORIA CLÍNICA — VER
+     ============================================================ -->
+<div class="modal fade" id="modalHcVer" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title"><i class="bi bi-eye me-2"></i>Detalle de historia clínica</h5>
+          <span class="modal-subtitle" id="hcVerSubtitle"></span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="hcVerContenido"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-clinical" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: HISTORIA CLÍNICA — EDITAR (con pestañas)
+     ============================================================ -->
+<div class="modal fade" id="modalHcEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar historia clínica</h5>
+          <span class="modal-subtitle" id="hcEditarSubtitle"></span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <form id="formHcEditar">
+        <div class="modal-body">
+          <input type="hidden" id="hcEditId">
+          <ul class="nav nav-tabs nav-tabs-clinical" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#hcTabInfo" type="button" role="tab">Información</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#hcTabAntecedentes" type="button" role="tab">Antecedentes</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#hcTabMedicamentos" type="button" role="tab">Medicamentos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#hcTabObservaciones" type="button" role="tab">Observaciones</button>
+            </li>
+          </ul>
+          <div class="tab-content pt-3">
+
+            <!-- Información -->
+            <div class="tab-pane fade show active" id="hcTabInfo" role="tabpanel">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label-sm">Número de historia clínica</label>
+                  <input type="text" class="form-control" id="hcEditNumero" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label-sm">Fecha de apertura</label>
+                  <input type="date" class="form-control" id="hcEditFechaApertura" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label-sm" for="hcEditAlergias">Alergias</label>
+                  <div class="dynamic-list" id="hcEditAlergias" data-field="alergias"></div>
+                  <button type="button" class="btn-add-item" data-add-target="hcEditAlergias" data-placeholder="Ej. Penicilina">
+                    <i class="bi bi-plus-lg"></i>Agregar alergia
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check form-switch mt-4">
+                    <input class="form-check-input" type="checkbox" id="hcEditActivo">
+                    <label class="form-check-label form-label-sm" for="hcEditActivo">Historia clínica activa</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Antecedentes -->
+            <div class="tab-pane fade" id="hcTabAntecedentes" role="tabpanel">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label-sm">Antecedentes médicos</label>
+                  <div class="dynamic-list" id="hcEditAntMedicos" data-field="antecedentesMedicos"></div>
+                  <button type="button" class="btn-add-item" data-add-target="hcEditAntMedicos" data-placeholder="Ej. Hipertensión arterial">
+                    <i class="bi bi-plus-lg"></i>Agregar antecedente médico
+                  </button>
+                </div>
+                <div class="col-12">
+                  <label class="form-label-sm">Antecedentes quirúrgicos</label>
+                  <div class="dynamic-list" id="hcEditAntQuirurgicos" data-field="antecedentesQuirurgicos"></div>
+                  <button type="button" class="btn-add-item" data-add-target="hcEditAntQuirurgicos" data-placeholder="Ej. Apendicectomía 2019">
+                    <i class="bi bi-plus-lg"></i>Agregar antecedente quirúrgico
+                  </button>
+                </div>
+                <div class="col-12">
+                  <label class="form-label-sm">Antecedentes familiares</label>
+                  <div class="dynamic-list" id="hcEditAntFamiliares" data-field="antecedentesFamiliares"></div>
+                  <button type="button" class="btn-add-item" data-add-target="hcEditAntFamiliares" data-placeholder="Ej. Diabetes tipo II (madre)">
+                    <i class="bi bi-plus-lg"></i>Agregar antecedente familiar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Medicamentos -->
+            <div class="tab-pane fade" id="hcTabMedicamentos" role="tabpanel">
+              <label class="form-label-sm">Medicamentos actuales</label>
+              <div class="dynamic-list" id="hcEditMedicamentos" data-field="medicamentosActuales"></div>
+              <button type="button" class="btn-add-item" data-add-target="hcEditMedicamentos" data-placeholder="Ej. Losartán 50mg cada 24h">
+                <i class="bi bi-plus-lg"></i>Agregar medicamento
+              </button>
+            </div>
+
+            <!-- Observaciones -->
+            <div class="tab-pane fade" id="hcTabObservaciones" role="tabpanel">
+              <label class="form-label-sm" for="hcEditObservaciones">Observaciones generales</label>
+              <textarea class="form-control" id="hcEditObservaciones" rows="6"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-clinical" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-clinical"><i class="bi bi-save me-1"></i>Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: ANAMNESIS — VER
+     ============================================================ -->
+<div class="modal fade" id="modalAnVer" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title"><i class="bi bi-eye me-2"></i>Detalle de anamnesis</h5>
+          <span class="modal-subtitle" id="anVerSubtitle"></span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="accordion accordion-clinical" id="anVerAccordion"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-clinical" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: ANAMNESIS — EDITAR (Extra Large + Accordion)
+     ============================================================ -->
+<div class="modal fade" id="modalAnEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title"><i class="bi bi-clipboard2-pulse-fill me-2"></i>Formulario de anamnesis</h5>
+          <span class="modal-subtitle" id="anEditarSubtitle"></span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <form id="formAnEditar">
+        <div class="modal-body">
+          <input type="hidden" id="anEditId">
+
+          <div class="accordion accordion-clinical" id="anAccordion">
+
+            <!-- AN-01 Datos Generales -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#anSec01">
+                  <span class="section-code">AN-01</span>Datos Generales
+                </button>
+              </h2>
+              <div id="anSec01" class="accordion-collapse collapse show" data-bs-parent="#anAccordion">
+                <div class="accordion-body">
+                  <div class="field-grid-2" id="anFieldsDatosGenerales"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AN-02 Motivo de Consulta -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#anSec02">
+                  <span class="section-code">AN-02</span>Motivo de Consulta
+                </button>
+              </h2>
+              <div id="anSec02" class="accordion-collapse collapse" data-bs-parent="#anAccordion">
+                <div class="accordion-body">
+                  <div class="field-grid-2" id="anFieldsMotivoConsulta"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AN-03 Antecedentes Personales -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#anSec03">
+                  <span class="section-code">AN-03</span>Antecedentes Personales
+                </button>
+              </h2>
+              <div id="anSec03" class="accordion-collapse collapse" data-bs-parent="#anAccordion">
+                <div class="accordion-body">
+                  <div class="review-grid" id="anFieldsAntecedentesPersonales"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AN-04 Gineco Obstétricos / Andrológicos -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#anSec04">
+                  <span class="section-code">AN-04</span>Gineco Obstétricos / Andrológicos
+                </button>
+              </h2>
+              <div id="anSec04" class="accordion-collapse collapse" data-bs-parent="#anAccordion">
+                <div class="accordion-body">
+                  <div class="gyn-columns">
+                    <div>
+                      <div class="gyn-column-title"><i class="bi bi-gender-female me-1"></i>Gineco-obstétricos</div>
+                      <div class="field-grid-2" id="anFieldsGineco"></div>
+                    </div>
+                    <div>
+                      <div class="gyn-column-title"><i class="bi bi-gender-male me-1"></i>Andrológicos</div>
+                      <div class="field-grid-2" id="anFieldsAndrologico"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AN-05 Antecedentes Familiares -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#anSec05">
+                  <span class="section-code">AN-05</span>Antecedentes Familiares
+                </button>
+              </h2>
+              <div id="anSec05" class="accordion-collapse collapse" data-bs-parent="#anAccordion">
+                <div class="accordion-body">
+                  <div class="review-grid" id="anFieldsAntecedentesFamiliares"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AN-06 Enfermedad Actual -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#anSec06">
+                  <span class="section-code">AN-06</span>Enfermedad Actual
+                </button>
+              </h2>
+              <div id="anSec06" class="accordion-collapse collapse" data-bs-parent="#anAccordion">
+                <div class="accordion-body">
+                  <div class="field-grid-2" id="anFieldsEnfermedadActual"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AN-07 Revisión por Sistemas -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#anSec07">
+                  <span class="section-code">AN-07</span>Revisión por Sistemas
+                </button>
+              </h2>
+              <div id="anSec07" class="accordion-collapse collapse" data-bs-parent="#anAccordion">
+                <div class="accordion-body">
+                  <div class="review-grid" id="anFieldsRevisionSistemas"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-clinical" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-clinical"><i class="bi bi-save me-1"></i>Guardar anamnesis</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: CONFIRMAR ELIMINACIÓN (genérico)
+     ============================================================ -->
+<div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-0" id="confirmarEliminarTexto">¿Deseas eliminar este registro? Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-clinical" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+          <i class="bi bi-trash me-1"></i>Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap 5 Bundle (CDN) -->
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+<script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

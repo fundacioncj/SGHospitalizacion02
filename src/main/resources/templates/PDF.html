@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>HCU-003 — Hospitalización · Anamnesis</title>
+    <link rel="stylesheet" th:href="@{/css/hcu003.css}"/>
+    <style>
+        .print-actions{margin:15px auto;text-align:center}
+        .btn-print{padding:8px 18px;border:1px solid #333;background:#fff;cursor:pointer;font-weight:bold}
+        .text-muted-empty{color:#777;font-style:italic}
+        .check-view{font-weight:bold;text-align:center}
+        .check-view.marcado{color:#000}
+        @media print{
+            .print-actions{display:none!important}
+            body{margin:0}
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================================================================
+     BOTÓN SOLO PARA IMPRESIÓN
+     ================================================================ -->
+<div style="width:90%;" class="print-actions">
+    <button type="button" class="btn btn-primary" onclick="descargarPDF()">
+        <i class="fas fa-file-pdf"></i> Descargar PDF
+    </button>
+</div>
+
+<div id="pagina1">
+    <!-- ================================================================
+     CABECERA
+     ================================================================ -->
+    <div style="width:90%;">
+    <table class="tbl-hdr">
+        <tr>
+            <td rowspan="2" class="v-mid center logo-cell">MSP</td>
+            <td class="v-mid center title-top">
+                HOSPITALIZACIÓN — ANAMNESIS, EXAMEN FÍSICO Y PRESCRIPCIONES
+            </td>
+            <td rowspan="2" class="v-mid center form-code">
+                SNS-MSP / HCU-form.003 / 2021
+            </td>
+        </tr>
+        <tr>
+            <td class="v-mid center title-sub">ANAMNESIS Y EXAMEN FÍSICO</td>
+        </tr>
+    </table>
+    </div>
+
+
+    <!-- ================================================================
+        A. DATOS DEL ESTABLECIMIENTO Y PACIENTE
+        ================================================================ -->
+    <div style="width:90%;" class="espacio">
+    <table>
+        <tr>
+        <td colspan="5" class="sec-hdr">A. DATOS DEL ESTABLECIMIENTO Y USUARIO / PACIENTE</td>
+        </tr>
+        <tr>
+        <td class="col-hdr" style="width:22%;">INSTITUCIÓN DEL SISTEMA</td>
+        <td class="col-hdr" style="width:10%;">UNICÓDIGO</td>
+        <td class="col-hdr" style="width:28%;">ESTABLECIMIENTO DE SALUD</td>
+        <td class="col-hdr" style="width:18%;">N.º DE HISTORIA CLÍNICA ÚNICA</td>
+        <td class="col-hdr" style="width:12%;">N.º DE ARCHIVO</td>
+        </tr>
+        <tr class="data-row">
+        <td>MSP</td>
+        <td id="vfUnicodigo">Sin registro</td>
+        <td id="vfEstablecimiento">Sin registro</td>
+        <td id="vfNumeroHistoriaClinica">Sin registro</td>
+        <td id="vfNumeroArchivo">Sin registro</td>
+        </tr>
+
+        <tr>
+        <td class="col-hdr">PRIMER APELLIDO</td>
+        <td class="col-hdr">SEGUNDO APELLIDO</td>
+        <td class="col-hdr">PRIMER NOMBRE</td>
+        <td class="col-hdr">SEGUNDO NOMBRE</td>
+        <td class="col-hdr sexo-edad-hdr">
+            <div>SEXO</div>
+            <div>EDAD</div>
+        </td>
+        </tr>
+        <tr class="data-row">
+        <td id="vfPrimerApellido">Sin registro</td>
+        <td id="vfSegundoApellido">Sin registro</td>
+        <td id="vfPrimerNombre">Sin registro</td>
+        <td id="vfSegundoNombre">Sin registro</td>
+        <td class="text-center">
+            <div id="vfSexo">Sin registro</div>
+            <div id="vfEdad">Sin registro</div>
+        </td>
+        </tr>
+
+        <!-- <tr>
+        <td class="col-hdr" colspan="2">CONDICIÓN EDAD</td>
+        <td class="col-hdr" colspan="3">DOCUMENTACIÓN / INFORMACIÓN DEL PACIENTE</td>
+        </tr>
+        <tr class="data-row">
+        <td colspan="2" class="center">
+            <span id="vfCondicionEdad">A — Años</span>
+        </td>
+        <td colspan="3">
+            C.I.: <strong id="vfCedulaPaciente">Sin registro</strong>
+            &nbsp;|&nbsp;
+            Tipo sangre: <strong id="vfTipoSangre">Sin registro</strong>
+        </td>
+        </tr> -->
+    </table>
+    </div>
+
+
+    <!-- ================================================================
+        B. MOTIVO DE CONSULTA
+        ================================================================ -->
+    <div style="width:90%;">
+        <table style="table-layout:auto;" class="espacio">
+            <tr>
+                <td colspan="4" class="sec-hdr">
+                    B. MOTIVO DE CONSULTA
+                    <span class="sec-hint">— ANOTAR LA CAUSA DEL PROBLEMA EN LA VERSIÓN DEL INFORMANTE</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-hdr text-center" style="width:5%;">#</td>
+                <td class="col-hdr text-center" style="width:50%;">DESCRIPCIÓN</td>
+                <td class="col-hdr text-center" style="width:5%;">#</td>
+                <td class="col-hdr text-center" style="width:50%;">DESCRIPCIÓN</td>
+            </tr>
+            <tr class="data-row">
+                <td id="number" class="text-center">1.</td>
+                <td id="vfMotivo1">Sin registro</td>
+                <td id="number" class="text-center">4.</td>
+                <td id="vfMotivo4">Sin registro</td>
+            </tr>
+            <tr class="data-row">
+                <td id="number" class="text-center">2.</td>
+                <td id="vfMotivo2">Sin registro</td>
+                <td id="number" class="text-center">5.</td>
+                <td id="vfMotivo5">Sin registro</td>
+            </tr>
+            <tr class="data-row">
+                <td id="number" class="text-center">3.</td>
+                <td id="vfMotivo3">Sin registro</td>
+                <td id="number" class="text-center">6.</td>
+                <td id="vfMotivo6">Sin registro</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ================================================================
+        C. ANTECEDENTES PERSONALES
+        ================================================================ -->
+    <div style="width:90%;">
+        <table class="table table-bordered table-sm mb-0 espacio">
+            <tr>
+                <td colspan="24" class="sec-hdr">C. ANTECEDENTES PATOLÓGICOS PERSONALES</td>
+            </tr>
+            <tr>
+                <td colspan="24" class="lbl-row">DESCRIPCIONES:</td>
+            </tr>
+            <tr class="data-row">
+                <td colspan="3" class="col-hdr text-left">1. ALERGIA A MEDICAMENTOS</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisAlergiaMedicamentos">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">2. OTRAS ALERGIAS</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisOtrasAlergias">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">3. VACUNAS</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisVacunas">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">4. PATOLOGÍAS CLÍNICAS</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisPatologiasClinicas">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">5. MEDICACIÓN HABITUAL</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisMedicacionHabitual">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">6. QUIRÚRGICOS</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisAntecedentesQuirurgicos">&nbsp;</td>
+            </tr>
+            <tr class="data-row">
+                <td colspan="3" class="col-hdr text-left">7. HÁBITOS</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisHabitos">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">8. CONDICIÓN SOCIO ECONÓMICA</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisCondicionSocioeconomica">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">9. DISCAPACIDAD</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisDiscapacidad">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">10. RELIGIÓN</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisReligion">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left">11. TIPIFICACIÓN SANGUÍNEA</td>
+                <td colspan="1" class="text-center" id="vfAnamnesisTipificacionSanguinea">&nbsp;</td>
+                <td colspan="4"></td>
+            </tr>
+        </table>
+    </div>
+    <div style="width:90%;">
+        <table class="table table-bordered table-sm mb-0">
+            <tr>
+                <td colspan="24" class="ant-item">12. GINECO OBSTÉTRICOS Y ANDROLÓGICOS</td>
+            </tr>
+
+            <tr>
+                <td colspan="3" class="col-hdr text-left">EDAD MENARQUIA</td>
+                <td colspan="1" class="text-center" id="vfGinecoEdadMenarquia">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">EDAD MENOPAUSIA</td>
+                <td colspan="1" class="text-center" id="vfGinecoEdadMenopausia">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">CICLOS</td>
+                <td colspan="1" class="text-center" id="vfGinecoCiclos">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">EDAD INICIO V.S.</td>
+                <td colspan="1" class="text-center" id="vfGinecoEdadInicioVidaSexual">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">N.º GESTAS</td>
+                <td colspan="1" class="text-center" id="vfGinecoNumeroGestas">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">N.º PARTOS</td>
+                <td colspan="1" class="text-center" id="vfGinecoNumeroPartos">&nbsp;</td>
+            </tr>
+
+            <tr>
+                <td colspan="3" class="col-hdr">N.º ABORTOS</td>
+                <td colspan="1" class="text-center" id="vfGinecoNumeroAbortos">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">N.º CESÁREAS</td>
+                <td colspan="1" class="text-center" id="vfGinecoNumeroCesareas">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">N.º HIJOS VIVOS</td>
+                <td colspan="1" class="text-center" id="vfGinecoNumeroHijosVivos">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">Fecha. ÚLT. MENSTRUACIÓN</td>
+                <td colspan="1" class="text-center" id="vfGinecoFechaUltimaMenstruacion">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">Fecha. ÚLTIMO PARTO</td>
+                <td colspan="1" class="text-center" id="vfGinecoFechaUltimoParto">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">Fecha. ÚLT. CITOLOGÍA</td>
+                <td colspan="1" class="text-center" id="vfGinecoFechaUltimaCitologiaCervical">&nbsp;</td>
+            </tr>
+
+            <tr>
+                <td colspan="3" class="col-hdr">Fecha. ÚLT. COLPOSCOPÍA</td>
+                <td colspan="3" class="text-center" id="vfGinecoFechaUltimaColposcopia">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">Fecha. ÚLT. MAMOGRAFÍA</td>
+                <td colspan="3" class="text-center" id="vfGinecoFechaUltimaMamografia">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">MÉTODO PLANIF. FAMILIAR</td>
+                <td colspan="3" class="text-center" id="vfGinecoMetodoPlanificacionFamiliar">&nbsp;</td>
+
+                <td colspan="3" class="col-hdr">TERAPIA HORMONAL</td>
+                <td colspan="3" class="text-center" id="vfGinecoTerapiaHormonal">&nbsp;</td>
+            </tr>
+
+            <tr>
+                <td colspan="6" class="col-hdr">Fecha. ÚLTIMO ANTÍGENO PROSTÁTICO</td>
+                <td colspan="6" class="text-center" id="vfGinecoFechaUltimoAntigenoProstatico">&nbsp;</td>
+
+                <td colspan="6" class="col-hdr">Fecha. ÚLTIMO ECO PROSTÁTICO</td>
+                <td colspan="6" class="text-center" id="vfGinecoFechaUltimoEcoProstatico">&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+    <div style="width:90%;">
+        <table class="table table-bordered table-sm mb-0">
+            <tr style="height:80px;">
+                <td style="vertical-align:top;" id="vfAnamnesisAntecedentesDescripcion">
+                    &nbsp;
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- ================================================================
+        D. ANTECEDENTES PATOLÓGICOS FAMILIARES
+        ================================================================ -->
+    <div style="width:90%;" class="mb-3 espacio">
+        <table class="table table-bordered table-sm mb-0">
+            <tr>
+                <td colspan="20" class="sec-hdr">
+                    D. ANTECEDENTES PATOLÓGICOS FAMILIARES
+                    <span class="sec-hint">— MARCAR X CUANDO PRESENTE PATOLOGÍA</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3" class="col-hdr text-left py-0">1. CARDIOPATÍA</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarCardiopatia">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left py-0">2. HIPERTENSIÓN</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarHipertension">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left py-0">3. ENF. C. VASCULAR</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarEnfermedadCerebroVascular">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left py-0">4. ENDÓCRINO METABÓLICO</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarEndocrinoMetabolico">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left py-0">5. CÁNCER</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarCancer">&nbsp;</td>
+            </tr>
+
+            <tr>
+                <td colspan="3" class="col-hdr text-left py-0">6. TUBERCULOSIS</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarTuberculosis">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left py-0">7. ENF. MENTAL</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarEnfermedadMental">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left py-0">8. ENF. INFECCIOSA</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarEnfermedadInfecciosa">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left py-0">9. MAL FORMACIÓN</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarMalformacion">&nbsp;</td>
+                <td colspan="3" class="col-hdr text-left py-0">10. OTRO</td>
+                <td colspan="1" class="text-center py-0" id="vfAnamnesisFamiliarOtro">&nbsp;</td>
+            </tr>
+
+            <tr style="height:80px;">
+                <td colspan="20" style="vertical-align:top;" id="vfAnamnesisFamiliarOtroDescripcion">&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+
+
+    <!-- ================================================================
+        E. ENFERMEDAD ACTUAL
+        ================================================================ -->
+
+    <div style="width:90%;" class="mb-3 espacio">
+        <table class="table table-bordered table-sm mb-0">
+            <tr>
+                <td colspan="15" class="sec-hdr">E. ENFERMEDAD O PROBLEMA ACTUAL</td>
+            </tr>
+            <tr style="height:80px;">
+                <td colspan="15" id="vfAnamnesisEnfermedadActual" style="vertical-align:top;">&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+    <!-- ================================================================
+        F. REVISIÓN ACTUAL DE ÓRGANOS Y SISTEMAS
+        ================================================================ -->
+    <table style="width:90%; "class="mb-4 espacio"> 
+        <tr>
+            <td colspan="15" class="sec-hdr">
+                F. REVISIÓN ACTUAL DE ÓRGANOS Y SISTEMAS
+                <span class="sec-hint">— MARCAR X CUANDO PRESENTE PATOLOGÍA</span>
+            </td>
+        </tr>
+        <tr style="height:16px;">
+            <td class="ef-num">1.</td>
+            <td class="ef-name">PIEL - ANEXOS</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaPielAnexos">—</td>
+            <td class="ef-num">3.</td>
+            <td class="ef-name">RESPIRATORIO</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaRespiratorio">—</td>
+            <td class="ef-num">5.</td>
+            <td class="ef-name">DIGESTIVO</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaDigestivo">—</td>
+            <td class="ef-num">7.</td>
+            <td class="ef-name">MÚSCULO - ESQUELÉTICO</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaMusculoEsqueletico">—</td>
+            <td class="ef-num">9.</td>
+            <td class="ef-name">HEMO - LINFÁTICO</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaHemoLinfatico">—</td>
+        </tr>
+        <tr style="height:16px;">
+            <td class="ef-num">2.</td>
+            <td class="ef-name">ÓRGANOS DE LOS SENTIDOS</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaOrganosDeLosSentidos">—</td>
+            <td class="ef-num">4.</td>
+            <td class="ef-name">CARDIO - VASCULAR</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaCardiovascular">—</td>
+            <td class="ef-num">6.</td>
+            <td class="ef-name">GENITO - URINARIO</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaGenitoUrinario">—</td>
+            <td class="ef-num">8.</td>
+            <td class="ef-name">ENDÓCRINO</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaEndocrino">—</td>
+            <td class="ef-num">10.</td>
+            <td class="ef-name">NERVIOSO</td>
+            <td class="ef-check check-view" id="vfAnamnesisSistemaNervioso">—</td>
+        </tr>
+        <tr>
+            <td colspan="15" class="lbl-row">DESCRIPCIONES:</td>
+        </tr>
+        <tr class="data-row-lg">
+            <td colspan="15">
+                <div class="desc-grid">
+                    <div class="desc-item"><span class="desc-lbl">1. Piel - anexos:</span><span id="vfAnamnesisDescripcionPielAnexos">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">2. Órganos sentidos:</span><span id="vfAnamnesisDescripcionOrganosDeLosSentidos">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">3. Respiratorio:</span><span id="vfAnamnesisDescripcionRespiratorio">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">4. Cardiovascular:</span><span id="vfAnamnesisDescripcionCardiovascular">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">5. Digestivo:</span><span id="vfAnamnesisDescripcionDigestivo">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">6. Genito-urinario:</span><span id="vfAnamnesisDescripcionGenitoUrinario">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">7. Músculo-esquelético:</span><span id="vfAnamnesisDescripcionMusculoEsqueletico">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">8. Endócrino:</span><span id="vfAnamnesisDescripcionEndocrino">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">9. Hemo-linfático:</span><span id="vfAnamnesisDescripcionHemoLinfatico">Sin registro</span></div>
+                    <div class="desc-item"><span class="desc-lbl">10. Nervioso:</span><span id="vfAnamnesisDescripcionNervioso">Sin registro</span></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="pagina2">
+
+    <!-- ================================================================
+     BLOQUE  DATOS DEL USUARIO / PACIENTE
+     ================================================================ -->
+<div class="pagina-2-datos-paciente" ></div>
+    <table class="table table-bordered table-sm mb-2 espacio" style="width:90%;">
+        <tr>
+            <td colspan="5" class="col-hdr text-left">DATOS DEL USUARIO / PACIENTE</td>
+        </tr>
+        <tr>
+            <td class="col-hdr">PRIMER APELLIDO</td>
+            <td class="col-hdr">PRIMER NOMBRE</td>
+            <td class="col-hdr">EDAD</td>
+            <td class="col-hdr">NÚMERO DE HISTORIA CLÍNICA ÚNICA</td>
+            <td class="col-hdr">NÚMERO DE ARCHIVO</td>
+        </tr>
+        <tr class="data-row">
+            <td id="vfPagina2PrimerApellido">Sin registro</td>
+            <td id="vfPagina2PrimerNombre">Sin registro</td>
+            <td id="vfPagina2Edad" class="text-center">Sin registro</td>
+            <td id="vfPagina2NumeroHistoriaClinica" class="text-center">Sin registro</td>
+            <td id="vfPagina2NumeroArchivo" class="text-center">Sin registro</td>
+        </tr>
+    </table>
+
+
+    <!-- ================================================================
+        G. CONSTANTES VITALES
+        ================================================================ -->
+    <table class="table table-bordered table-sm espacio" style="width:90%;">
+        <tr>
+            <td colspan="9" class="sec-hdr text-left">
+                G. CONSTANTES VITALES Y ANTROPOMETRÍA
+            </td>
+        </tr>
+        <tr>
+            <td class="col-hdr text-center">TEMPERATURA</td>
+            <td class="col-hdr text-center">PRESIÓN ARTERIAL</td>
+            <td class="col-hdr text-center">PULSO</td>
+            <td class="col-hdr text-center">FRECUENCIA RESPIRATORIA</td>
+            <td class="col-hdr text-center">PESO</td>
+            <td class="col-hdr text-center">TALLA</td>
+            <td class="col-hdr text-center">IMC</td>
+            <td class="col-hdr text-center">PERÍMETRO CEFÁLICO</td>
+            <td class="col-hdr text-center">PULSIOXIMETRÍA</td>
+        </tr>
+        <tr class="data-row">
+            <td id="vfExamenTemperatura" class="text-center">Sin registro</td>
+            <td id="vfExamenPresionArterial" class="text-center">Sin registro</td>
+            <td id="vfExamenPulso" class="text-center">Sin registro</td>
+            <td id="vfExamenFrecuenciaRespiratoria" class="text-center">Sin registro</td>
+            <td id="vfExamenPeso" class="text-center">Sin registro</td>
+            <td id="vfExamenTalla" class="text-center">Sin registro</td>
+            <td id="vfExamenImc" class="text-center">Sin registro</td>
+            <td id="vfExamenPerimetroCefalico" class="text-center">Sin registro</td>
+            <td id="vfExamenPulsioximetria" class="text-center">Sin registro</td>
+        </tr>
+    </table>
+
+    <!-- ================================================================
+        H. EXAMEN FÍSICO REGIONAL
+        ================================================================ -->
+    <div style="width:90%;" class="mb-3 espacio">
+        <table class="table table-bordered table-sm mb-0">
+            <tr>
+                <td colspan="9" class="sec-hdr">H. EXAMEN FÍSICO REGIONAL</td>
+            </tr>
+            <tr>
+                <!-- REGIONAL = 60% -->
+                <td colspan="5" class="p-0" style="width:50%;">
+                    <table class="table table-bordered table-sm mb-0" style="table-layout:auto;">
+                        <tr>
+                            <td colspan="9" class="sec-hdr">REGIONAL</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center" style="width:5%;">1R</td>
+                            <td class="col-hdr text-left" style="width:25%;">PIEL - FANERAS</td>
+                            <td class="text-center" style="width:3%;" data-region-mark="pielFaneras">&nbsp;</td>
+                            <td class="col-hdr text-center" style="width:5%;">6R</td>
+                            <td class="col-hdr text-left" style="width:25%;">BOCA</td>
+                            <td class="text-center" style="width:3%;" data-region-mark="boca">&nbsp;</td>
+                            <td class="col-hdr text-center" style="width:5%;">11R</td>
+                            <td class="col-hdr text-left" style="width:25%;">ABDOMEN</td>
+                            <td class="text-center" style="width:4%;" data-region-mark="abdomen">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center">2R</td>
+                            <td class="col-hdr text-left">CABEZA</td>
+                            <td class="text-center" data-region-mark="cabeza">&nbsp;</td>
+                            <td class="col-hdr text-center">7R</td>
+                            <td class="col-hdr text-left">OROFARINGE</td>
+                            <td class="text-center" data-region-mark="orofaringe">&nbsp;</td>
+                            <td class="col-hdr text-center">12R</td>
+                            <td class="col-hdr text-left">COLUMNA VERTEBRAL</td>
+                            <td class="text-center" data-region-mark="columnaVertebral">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center">3R</td>
+                            <td class="col-hdr text-left">OJOS</td>
+                            <td class="text-center" data-region-mark="ojos">&nbsp;</td>
+                            <td class="col-hdr text-center">8R</td>
+                            <td class="col-hdr text-left">CUELLO</td>
+                            <td class="text-center" data-region-mark="cuello">&nbsp;</td>
+                            <td class="col-hdr text-center">13R</td>
+                            <td class="col-hdr text-left">INGLE-PERINÉ</td>
+                            <td class="text-center" data-region-mark="inglePerine">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center">4R</td>
+                            <td class="col-hdr text-left">OÍDOS</td>
+                            <td class="text-center" data-region-mark="oidos">&nbsp;</td>
+                            <td class="col-hdr text-center">9R</td>
+                            <td class="col-hdr text-left">AXILAS - MAMAS</td>
+                            <td class="text-center" data-region-mark="axilasMamas">&nbsp;</td>
+                            <td class="col-hdr text-center">14R</td>
+                            <td class="col-hdr text-left">MIEMBROS SUPERIORES</td>
+                            <td class="text-center" data-region-mark="miembrosSuperiores">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center">5R</td>
+                            <td class="col-hdr text-left">NARIZ</td>
+                            <td class="text-center" data-region-mark="nariz">&nbsp;</td>
+                            <td class="col-hdr text-center">10R</td>
+                            <td class="col-hdr text-left">TÓRAX</td>
+                            <td class="text-center" data-region-mark="torax">&nbsp;</td>
+                            <td class="col-hdr text-center">15R</td>
+                            <td class="col-hdr text-left">MIEMBROS INFERIORES</td>
+                            <td class="text-center" data-region-mark="miembrosInferiores">&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+
+                <!-- SISTÉMICO = 30% -->
+                <td colspan="4" class="p-0" style="width:30%;">
+                    <table class="table table-bordered table-sm mb-0" style="table-layout:auto;">
+                        <tr>
+                            <td colspan="6" class="sec-hdr">SISTÉMICO</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center" style="width:7%;">1S</td>
+                            <td class="col-hdr text-left" style="width:38%;">ÓRGANOS DE LOS SENTIDOS</td>
+                            <td class="text-center" style="width:5%;" data-region-mark="organosSentidos">&nbsp;</td>
+                            <td class="col-hdr text-center" style="width:7%;">6S</td>
+                            <td class="col-hdr text-left" style="width:38%;">URINARIO</td>
+                            <td class="text-center" style="width:5%;" data-region-mark="urinario">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center">2S</td>
+                            <td class="col-hdr text-left">RESPIRATORIO</td>
+                            <td class="text-center" data-region-mark="respiratorio">&nbsp;</td>
+                            <td class="col-hdr text-center">7S</td>
+                            <td class="col-hdr text-left">MÚSCULO - ESQUELÉTICO</td>
+                            <td class="text-center" data-region-mark="musculoEsqueletico">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center">3S</td>
+                            <td class="col-hdr text-left">CARDIO - VASCULAR</td>
+                            <td class="text-center" data-region-mark="cardioVascular">&nbsp;</td>
+                            <td class="col-hdr text-center">8S</td>
+                            <td class="col-hdr text-left">ENDÓCRINO</td>
+                            <td class="text-center" data-region-mark="endocrino">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center">4S</td>
+                            <td class="col-hdr text-left">DIGESTIVO</td>
+                            <td class="text-center" data-region-mark="digestivo">&nbsp;</td>
+                            <td class="col-hdr text-center">9S</td>
+                            <td class="col-hdr text-left">HEMO - LINFÁTICO</td>
+                            <td class="text-center" data-region-mark="hemoLinfatico">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col-hdr text-center">5S</td>
+                            <td class="col-hdr text-left">GENITAL</td>
+                            <td class="text-center" data-region-mark="genital">&nbsp;</td>
+                            <td class="col-hdr text-center">10S</td>
+                            <td class="col-hdr text-left">NEUROLÓGICO</td>
+                            <td class="text-center" data-region-mark="neurologico">&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <!-- ESPACIO PARA ESCRIBIR -->
+        <table class="table table-bordered table-sm" style="width:100%; table-layout:fixed;">
+            <tr style="height:70px;">
+                <td id="vfExamenH" style="width:50%; vertical-align:top;"></td>
+                <td id="vfExamenFigura" style="width:50%; vertical-align:top; text-align:center;">
+                    <div id="examViewportFront" class="em-body-view" data-view="front"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ================================================================
+        I. ANÁLISIS
+        ================================================================ -->
+    <div style="width:90%;" class="mt-3 espacio">
+        <table>
+            <tr>
+                <td class="sec-hdr">I. ANÁLISIS</td>
+            </tr>
+            <tr style="height:70px;">
+                <td id="vfExamenAnalisis">Sin registro</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ================================================================
+        J. DIAGNÓSTICOS
+        ================================================================ -->
+    <div style="width:90%;" class="mt-3 espacio">
+        <table style="table-layout:auto;" class="table table-bordered table-sm mb-0">
+            <tr>
+                <td colspan="10" class="sec-hdr">
+                    J. DIAGNÓSTICO
+                    <span class="sec-hint">PRE = PRESUNTIVO&nbsp;&nbsp;&nbsp;DEF = DEFINITIVO</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-hdr text-center" style="width:3%;">#</td>
+                <td class="col-hdr text-center" style="width:30%;">DESCRIPCIÓN</td>
+                <td class="col-hdr text-center" style="width:7%;">CIE</td>
+                <td class="col-hdr text-center" style="width:6%;">PRE</td>
+                <td class="col-hdr text-center" style="width:6%;">DEF</td>
+
+                <td class="col-hdr text-center" style="width:3%;">#</td>
+                <td class="col-hdr text-center" style="width:30%;">DESCRIPCIÓN</td>
+                <td class="col-hdr text-center" style="width:5%;">CIE</td>
+                <td class="col-hdr text-center" style="width:4%;">PRE</td>
+                <td class="col-hdr text-center" style="width:4%;">DEF</td>
+            </tr>
+
+            <tbody id="vfExamenDiagnosticosTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ================================================================
+        K. PLAN DE TRATAMIENTO
+        ================================================================ -->
+
+    <div style="width:90%;" class="mt-3 espacio">
+    <table>
+        <tr>
+            <td class="sec-hdr">K. PLAN DE TRATAMIENTO</td>
+        </tr>
+        <tr style="height:70px;">
+            <td id="vfExamenPlanTratamiento">Sin registro</td>
+        </tr>
+    </table>
+    </div>     
+
+    <!-- ================================================================
+        L. PROFESIONAL
+        ================================================================ -->
+    <div style="width:90%;" class="mt-3 espacio">
+    <table>
+        <tr>
+            <td colspan="4" class="sec-hdr">L. PROFESIONAL RESPONSABLE</td>
+        </tr>
+        <tr>
+            <td class="col-hdr">FECHA</td>
+            <td class="col-hdr">NOMBRE DEL PROFESIONAL</td>
+            <td class="col-hdr">CÉDULA / ID</td>
+            <td class="col-hdr">FIRMA</td>
+        </tr>
+        <tr style="height:50px;">
+            <td id="vfProfesionalFecha">Sin registro</td>
+            <td id="vfProfesionalNombreMedico">Sin registro</td>
+            <td id="vfProfesionalCedulaMedico">Sin registro</td>
+            <td></td>
+        </tr>
+    </table>
+    </div>
+
+        
+
+    <table class="form-footer">
+        <tr>
+            <td style="width:50%;">SNS-MSP / HCU-form.003 / 2021</td>
+            <td class="right">HOSPITALIZACIÓN — ANAMNESIS Y EXAMEN FÍSICO</td>
+        </tr>
+    </table>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- <script th:src="@{/js/modules/verAnamnesisExamenFisico.js}"></script> -->
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
