@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sgh02-frontend
+    volumes:
+      - ./src/main/resources/application-docker.properties:/app/config/application.properties:ro
+    environment:
+      JAVA_OPTS: ${JAVA_OPTS:--Xms256m -Xmx512m}
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    networks:
+      - sghospitalizacion_net
+
+networks:
+  sghospitalizacion_net:
+    external: true
