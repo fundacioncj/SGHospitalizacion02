@@ -567,10 +567,7 @@
                     <div class="card-header bg-light"><h5 class="mb-0">EM-05 PLAN DE TRATAMIENTO</h5></div>
                     <div class="card-body"><textarea class="form-control" id="exam_planTratamiento" rows="6" placeholder="Ingrese el plan de tratamiento..."></textarea></div>
                   </div>
-                  <div class="card-footer bg-white text-right">
-                    <button type="button" class="btn btn-secondary mr-2" id="btnLimpiarExamenMedico">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardarAnamnesisExamenFisico"><i class="fas fa-save mr-1"></i>Guardar Examen Físico</button>
-                  </div>
+
                 </div>
 
               </div>
@@ -580,7 +577,12 @@
         </div>
       </div>
     </section>
-
+    <div class="card-footer bg-white text-right" id="accionesExamenFisico" style="display:none;">
+      <button type="button" class="btn btn-secondary mr-2" id="btnLimpiarExamenMedico">Cancelar..</button>
+      <button type="button" class="btn btn-info" id="btnGuardarAnamnesisExamenFisico">
+        <i class="fas fa-save mr-1"></i>Guardar Examen Físico
+      </button>
+    </div>
   </div>
 
   <footer th:replace="~{fragments/layout :: footer}"></footer>

@@ -211,11 +211,13 @@ function cargarExamenFisicoModo() {
 
   if (modo === "ver") {
     bloquearExamenFisico();
+    document.getElementById("accionesExamenFisico").style.display = "none";
   }
 
   if (modo === "editar") {
     habilitarExamenFisico();
     window.modoEdicionExamen = true;
+    document.getElementById("accionesExamenFisico").style.display = "block";
   }
 }
 
